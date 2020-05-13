@@ -9,7 +9,6 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "users")
-@Table(name = "admins")
 @Data
 public class User extends GenericEntityID {
 

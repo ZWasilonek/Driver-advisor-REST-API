@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.coderslab.service.SpringDataUserDetailsService;
+import pl.coderslab.impl.SpringDataUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -27,11 +27,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/hero/**").permitAll()
+                .antMatchers("/",
+                        "/user/**",
+                        "/v2/api-docs",
+                        "/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/webjars/**").permitAll()
                 .antMatchers("/admin/**").authenticated()
                 .and().formLogin().defaultSuccessUrl("/admin")
-                .and().logout().logoutSuccessUrl("/");
+                .and().logout().logoutSuccessUrl("/")
+        .and()
+        .csrf().disable();
     }
 
 }

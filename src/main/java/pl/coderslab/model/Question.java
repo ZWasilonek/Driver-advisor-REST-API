@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
