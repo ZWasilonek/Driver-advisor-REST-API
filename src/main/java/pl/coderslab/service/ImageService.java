@@ -10,4 +10,6 @@ public interface ImageService<T> extends GenericService<T> {
 
     void saveImage(MultipartFile file);
 
+    void updateImage(MultipartFile file, Long imageId);
+
 }
