@@ -21,8 +21,8 @@ public abstract class GenericServiceImpl<T,R extends JpaRepository<T, Long>> imp
     }
 
     @Override
-    public T create(T o) {
-        return repository.save(o);
+    public void create(T o) {
+        repository.save(o);
     }
 
     @Override

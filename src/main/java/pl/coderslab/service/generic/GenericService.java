@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GenericService<T> {
 
-    T create(T o);
+    void create(T o);
     T update(T t);
     List<T> findAll();
     List<T> findAll(int pageNo, int limit);

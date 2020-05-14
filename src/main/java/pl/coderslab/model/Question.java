@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -22,4 +23,8 @@ public class Question extends GenericEntityID {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
+
+    public Question() {
+        answers = new HashSet<>();
+    }
 }
