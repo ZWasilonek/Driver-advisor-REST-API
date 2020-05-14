@@ -9,7 +9,9 @@ public class FileUploadConfig {
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
-        return new CommonsMultipartResolver();
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+        commonsMultipartResolver.setMaxUploadSize(209715200);
+        return commonsMultipartResolver;
     }
 
 }
