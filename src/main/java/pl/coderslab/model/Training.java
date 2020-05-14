@@ -21,4 +21,5 @@ public class Training extends GenericEntityID {
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> questions;
 
+    //Jeśli użytkownik odpowie prawidłowo to score = +1
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "images")
@@ -13,4 +14,8 @@ public class Image extends GenericEntityID {
 
     private String fileName;
 
+    private String fileType;
+
+    @Lob
+    private byte[] data;
 }
