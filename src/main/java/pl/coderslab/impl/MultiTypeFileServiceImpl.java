@@ -7,54 +7,56 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.impl.generic.GenericServiceImpl;
-import pl.coderslab.model.Image;
-import pl.coderslab.repository.ImageRepository;
-import pl.coderslab.service.ImageService;
+import pl.coderslab.model.MultiTypeFile;
+import pl.coderslab.repository.MultiTypeFileRepository;
+import pl.coderslab.service.MultiTypeFileService;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class ImageServiceImpl extends GenericServiceImpl<Image, ImageRepository> implements ImageService<Image> {
+public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFile, MultiTypeFileRepository> implements MultiTypeFileService<MultiTypeFile> {
 
-    private final Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(MultiTypeFileServiceImpl.class);
 
-    public ImageServiceImpl(ImageRepository repository) {
+    public MultiTypeFileServiceImpl(MultiTypeFileRepository repository) {
         super(repository);
     }
 
     @Override
-    public Image findByFileName(String fileName) {
+    public MultiTypeFile findByFileName(String fileName) {
         return repository.findByFileName(fileName);
     }
 
     @Override
     public void saveImage(MultipartFile file) {
         try {
-            Image image = new Image();
+            MultiTypeFile multitypeFile = new MultiTypeFile();
             if (!file.isEmpty()) {
-                image.setFileName(file.getOriginalFilename());
-                image.setFileType(file.getContentType());
-                image.setData(file.getBytes());
-                this.create(image);
+                multitypeFile.setFileName(file.getOriginalFilename());
+                multitypeFile.setFileType(file.getContentType());
+                multitypeFile.setData(file.getBytes());
+                this.create(multitypeFile);
 //                saveImgIntoDir(file);
                 logger.debug("Single file upload!");
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            //zle obsługujesz wyjątki
+            //amazon
         }
     }
 
     @Override
     public void updateImage(MultipartFile file, Long imageId) {
-        Image image = repository.findById(imageId).orElse(null);
+        MultiTypeFile multitypeFile = repository.findById(imageId).orElse(null);
         try {
-            if (!file.isEmpty() && image != null) {
-                image.setFileName(file.getOriginalFilename());
-                image.setFileType(file.getContentType());
-                image.setData(file.getBytes());
-                this.update(image);
+            if (!file.isEmpty() && multitypeFile != null) {
+                multitypeFile.setFileName(file.getOriginalFilename());
+                multitypeFile.setFileType(file.getContentType());
+                multitypeFile.setData(file.getBytes());
+                this.update(multitypeFile);
 //                saveImgIntoDir(file);
                 logger.debug("Single file upload!");
             }

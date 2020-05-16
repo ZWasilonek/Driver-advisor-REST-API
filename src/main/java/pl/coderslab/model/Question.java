@@ -22,7 +22,7 @@ public class Question extends GenericEntityID {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private Image image;
+    private MultiTypeFile multitypeFile;
 
     public Question() {
         answers = new HashSet<>();

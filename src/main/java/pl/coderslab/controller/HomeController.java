@@ -40,10 +40,10 @@ public class HomeController {
         userService.saveUser(user);
         result += "-created-";
 
-        Image imageAdvice = new Image();
-        imageAdvice.setFileName("test.jpg");
-        Image imageQuest = new Image();
-        imageQuest.setFileName("testQuestion.jpg");
+        MultiTypeFile multiTypeFileAdvice = new MultiTypeFile();
+        multiTypeFileAdvice.setFileName("test.jpg");
+        MultiTypeFile multiTypeFileQuest = new MultiTypeFile();
+        multiTypeFileQuest.setFileName("testQuestion.jpg");
 
         Tag tag1 = new Tag();
         tag1.setName("bezpieczeństwo");
@@ -66,7 +66,7 @@ public class HomeController {
         question1.setAnswers((Set<Answer>) answer);
         question1.setAnswers((Set<Answer>) answer2);
         question1.setAnswers((Set<Answer>) answer3);
-        question1.setImage(imageQuest);
+        question1.setMultitypeFile(multiTypeFileQuest);
 //        Question question2 = new Question();
 //        question2.setTitle("Test 2 training's question");
 
@@ -80,7 +80,7 @@ public class HomeController {
         advice.setAdmin(user);
         advice.setCreated(LocalDate.now());
         advice.setGuide("Test information");
-        advice.setImage(imageAdvice);
+        advice.setMultitypeFile(multiTypeFileAdvice);
         advice.setRecommendation(4);
         advice.setShared(2);
         advice.getTags().add(tag1);

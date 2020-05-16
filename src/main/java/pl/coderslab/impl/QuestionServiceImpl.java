@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.coderslab.exception.EntityNotFoundException;
 import pl.coderslab.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.Question;
 import pl.coderslab.repository.QuestionRepository;
@@ -27,4 +28,5 @@ public class QuestionServiceImpl extends GenericServiceImpl<Question, QuestionRe
         }
         new ResponseEntity<>("-Failed to create a question-", HttpStatus.NOT_FOUND);
     }
+
 }

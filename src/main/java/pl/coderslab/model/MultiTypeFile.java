@@ -10,7 +10,7 @@ import javax.persistence.Lob;
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "images")
 @Data
-public class Image extends GenericEntityID {
+public class MultiTypeFile extends GenericEntityID {
 
     private String fileName;
 
@@ -19,9 +19,9 @@ public class Image extends GenericEntityID {
     @Lob
     private byte[] data;
 
-    public Image() {}
+    public MultiTypeFile() {}
 
-    public Image(String fileName, String fileType, byte[] data) {
+    public MultiTypeFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;

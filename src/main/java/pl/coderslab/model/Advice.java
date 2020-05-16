@@ -27,7 +27,7 @@ public class Advice extends GenericEntityID {
     private Set<Tag> tags;
 
     @OneToOne
-    private Image image;
+    private MultiTypeFile multitypeFile;
 
     @OneToOne
     private Training training;
