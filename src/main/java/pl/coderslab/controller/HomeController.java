@@ -66,7 +66,7 @@ public class HomeController {
         question1.setAnswers((Set<Answer>) answer);
         question1.setAnswers((Set<Answer>) answer2);
         question1.setAnswers((Set<Answer>) answer3);
-        question1.setMultitypeFile(multiTypeFileQuest);
+//        question1.setMultitypeFile(multiTypeFileQuest);
 //        Question question2 = new Question();
 //        question2.setTitle("Test 2 training's question");
 

@@ -9,7 +9,6 @@ import pl.coderslab.impl.MultiTypeFileServiceImpl;
 import pl.coderslab.model.MultiTypeFile;
 
 import static org.springframework.http.MediaType.*;
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/file")
@@ -27,9 +26,14 @@ public class MultiTypeFileRESTController {
         multiTypeFileService.saveFile(file);;
     }
 
-    @GetMapping(value = "/find/{id}")
-    public ResponseEntity<?> getImgById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+    @GetMapping(value = "/show/{id}")
+    public ResponseEntity<?> uploadById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.upload(fileId);
+    }
+
+    @GetMapping("/find/{id}")
+    public MultiTypeFile findById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+        return multiTypeFileService.findById(fileId);
     }
 
     @PostMapping(path = "/update/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
