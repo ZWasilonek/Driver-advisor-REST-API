@@ -36,4 +36,20 @@ public class QuestionController {
     public Question findById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
         return questionService.findById(questionId);
     }
+
+    @PutMapping("/update/{id}")
+    public Question updateById(@PathVariable("id") Long questionId,
+                               @Valid @RequestBody Answer answer1,
+                               @Valid @RequestBody Answer answer2,
+                               @Valid @RequestBody Answer answer3) throws EntityNotFoundException {
+        Question founded = questionService.findById(questionId);
+        founded.setAnswers(new HashSet<Answer>(Arrays.asList(answer1, answer2, answer3)));
+        return questionService.update(founded);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void removeById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
+        questionService.removeById(questionId);
+    }
+
 }

@@ -27,7 +27,7 @@ public class MultiTypeFileRESTController {
     }
 
     @GetMapping(value = "/show/{id}")
-    public ResponseEntity<?> uploadById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.upload(fileId);
     }
 
@@ -37,7 +37,7 @@ public class MultiTypeFileRESTController {
     }
 
     @PostMapping(path = "/update/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
-    public MultiTypeFile updateImg(@RequestPart("file") MultipartFile file,
+    public MultiTypeFile updateById(@RequestPart("file") MultipartFile file,
                                        @PathVariable("id") Long fileId) {
         MultiTypeFile foundedImg = multiTypeFileService.findById(fileId);
         multiTypeFileService.updateFile(file, fileId);
