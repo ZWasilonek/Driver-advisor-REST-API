@@ -1,6 +1,7 @@
-package pl.coderslab.exception.controller;
+package pl.coderslab.errorhandler.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileUploadException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -18,13 +19,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import pl.coderslab.exception.EntityNotFoundException;
-import pl.coderslab.exception.error.ApiError;
+import pl.coderslab.errorhandler.exception.EntityNotFoundException;
+import pl.coderslab.errorhandler.error.ApiError;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -120,6 +121,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(NOT_FOUND);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
+    }
+
+
+    /**
+     * Handle FileUploadException. Happens when the file has not been uploaded.
+     *
+     * @param ex FileUploadException
+     * @return the ApiError object
+     */
+    @ExceptionHandler(FileUploadException.class)
+    protected ResponseEntity<Object> handleMultipartException(
+            FileUploadException ex) {
+//        String error = "Failed upload error";
+        return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, ex));
     }
 
     /**

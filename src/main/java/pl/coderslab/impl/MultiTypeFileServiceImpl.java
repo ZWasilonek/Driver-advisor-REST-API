@@ -3,9 +3,11 @@ package pl.coderslab.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.repository.MultiTypeFileRepository;
@@ -15,8 +17,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @Service
-public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFile, MultiTypeFileRepository> implements MultiTypeFileService<MultiTypeFile> {
+public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFile, MultiTypeFileRepository> implements MultiTypeFileService {
 
     private final Logger logger = LoggerFactory.getLogger(MultiTypeFileServiceImpl.class);
 
@@ -30,9 +34,9 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFile, 
     }
 
     @Override
-    public void saveImage(MultipartFile file) {
+    public MultiTypeFile saveFile(MultipartFile file) {
+        MultiTypeFile multitypeFile = new MultiTypeFile();
         try {
-            MultiTypeFile multitypeFile = new MultiTypeFile();
             if (!file.isEmpty()) {
                 multitypeFile.setFileName(file.getOriginalFilename());
                 multitypeFile.setFileType(file.getContentType());
@@ -42,27 +46,37 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFile, 
                 logger.debug("Single file upload!");
             }
         } catch (IOException e) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            //zle obsługujesz wyjątki
-            //amazon
+            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return multitypeFile;
     }
 
     @Override
-    public void updateImage(MultipartFile file, Long imageId) {
-        MultiTypeFile multitypeFile = repository.findById(imageId).orElse(null);
+    public MultiTypeFile updateFile(MultipartFile file, Long fileId) throws EntityNotFoundException {
+        MultiTypeFile multiTypeFile = findById(fileId);
         try {
-            if (!file.isEmpty() && multitypeFile != null) {
-                multitypeFile.setFileName(file.getOriginalFilename());
-                multitypeFile.setFileType(file.getContentType());
-                multitypeFile.setData(file.getBytes());
-                this.update(multitypeFile);
+            if (!file.isEmpty() && multiTypeFile != null) {
+                multiTypeFile.setFileName(file.getOriginalFilename());
+                multiTypeFile.setFileType(file.getContentType());
+                multiTypeFile.setData(file.getBytes());
+                this.update(multiTypeFile);
 //                saveImgIntoDir(file);
                 logger.debug("Single file upload!");
             }
         } catch (IOException e) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return multiTypeFile;
+    }
+
+    public ResponseEntity<?> upload(Long fileId) throws EntityNotFoundException {
+        MultiTypeFile foundedFile = findById(fileId);
+        if (foundedFile != null) {
+            byte[] imageByte = foundedFile.getData();
+            return ok().contentType(MediaType.valueOf(foundedFile.getFileType()))
+                    .body(imageByte);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private void saveImgIntoDir(MultipartFile file) {

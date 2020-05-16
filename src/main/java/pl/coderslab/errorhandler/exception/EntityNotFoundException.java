@@ -1,4 +1,4 @@
-package pl.coderslab.exception;
+package pl.coderslab.errorhandler.exception;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,12 +8,14 @@ import java.util.stream.IntStream;
 
 public class EntityNotFoundException extends RuntimeException {
 
-    public EntityNotFoundException(String... searchParamsMap) {
-        super(EntityNotFoundException.generateMessage(toMap(String.class, String.class, searchParamsMap)));
+    public EntityNotFoundException(Class clazz, String... searchParamsMap) {
+        super(EntityNotFoundException.generateMessage(clazz.getSimpleName(), toMap(String.class, String.class, searchParamsMap)));
     }
 
-    private static String generateMessage(Map<String, String> searchParams) {
-        return " was not found for parameters " + searchParams;
+    private static String generateMessage(String entity, Map<String, String> searchParams) {
+        return StringUtils.capitalize(entity) +
+                " was not found for parameters " +
+                searchParams;
     }
 
     private static <K, V> Map<K, V> toMap(

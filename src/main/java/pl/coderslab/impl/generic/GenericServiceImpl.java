@@ -5,22 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.coderslab.exception.EntityNotFoundException;
-import pl.coderslab.model.Question;
+import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.model.generic.GenericEntityID;
 import pl.coderslab.service.generic.GenericService;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-public abstract class GenericServiceImpl<T,R extends JpaRepository<T, Long>> implements GenericService<T> {
+public abstract class GenericServiceImpl<T,R extends JpaRepository<T, Long>> implements GenericService<T>, Serializable {
 
     protected R repository;
-//    private Class clazz = this.getClass();
-    private final ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
 
     @Autowired
     public GenericServiceImpl(R repository) {
@@ -39,8 +35,9 @@ public abstract class GenericServiceImpl<T,R extends JpaRepository<T, Long>> imp
     }
 
     @Override
-    public void create(T o) {
+    public T create(T o) {
         repository.save(o);
+        return o;
     }
 
     @Override
@@ -71,15 +68,14 @@ public abstract class GenericServiceImpl<T,R extends JpaRepository<T, Long>> imp
 
     @Override
     public void removeById(Long id) {
-        Optional<T> item = repository.findById(id);
-        if (item.get() != null) repository.delete(item.get());
+        repository.findById(id).ifPresent(object -> repository.delete(object));
     }
 
     @Override
-    public T findById(Long id) {
-        T object = repository.findById(id).get();
+    public T findById(Long id) throws EntityNotFoundException {
+        T object = repository.findById(id).orElse(null);
         if (object == null) {
-            throw new EntityNotFoundException(getGenericTypeClass(T), id.toString());
+            throw new EntityNotFoundException(getGenericTypeClass(), "id", id.toString());
         }
         return object;
     }

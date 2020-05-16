@@ -4,12 +4,12 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.service.generic.GenericService;
 
-public interface MultiTypeFileService<T> extends GenericService<T> {
+public interface MultiTypeFileService extends GenericService<MultiTypeFile> {
 
     MultiTypeFile findByFileName(String fileName);
 
-    void saveImage(MultipartFile file);
+    MultiTypeFile saveFile(MultipartFile file);
 
-    void updateImage(MultipartFile file, Long imageId);
+    MultiTypeFile updateFile(MultipartFile file, Long imageId);
 
 }

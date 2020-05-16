@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.UserServiceImpl;
 import pl.coderslab.model.User;
 
@@ -22,41 +23,34 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createUser(@Valid @RequestBody User user) {
-        userService.saveUser(user);
-        return "-user created-";
+    public User createUser(@Valid @RequestBody User user) {
+        return userService.saveUser(user);
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long userId) {
-        User user = userService.findById(userId);
-        if (user == null) {
-            throw new ResourceNotFoundException("User not found for this id: " + userId);
-        }
-        return ResponseEntity.ok().body(user);
+    public User getUserById(@PathVariable(value = "id") Long userId) throws EntityNotFoundException {
+        return userService.findById(userId);
     }
 
     @PutMapping("/update/{id}")
-    public String updateUser(@PathVariable(value = "id") Long userId,
-                             @Valid @RequestBody User userDetails) throws ResourceNotFoundException {
+    public User updateUser(@PathVariable(value = "id") Long userId,
+                             @Valid @RequestBody User userDetails) throws EntityNotFoundException {
         User foundedUser = userService.findById(userId);
         if (foundedUser != null) {
             foundedUser.setUsername(userDetails.getUsername());
             foundedUser.setPassword(userDetails.getPassword());
-            userService.saveUser(foundedUser);
-            return "-" + foundedUser.toString() + " updated-";
+            return userService.saveUser(foundedUser);
         }
         throw new ResourceNotFoundException("User not found for this id: " + userId);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUserById(@PathVariable(value = "id") Long id) {
+    public void deleteUserById(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
         userService.removeById(id);
-        return "-user with id " + id + " has been removed";
     }
 
     @GetMapping("/findAll")
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws EntityNotFoundException {
         return userService.findAll();
     }
 
