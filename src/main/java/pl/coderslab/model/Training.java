@@ -6,6 +6,7 @@ import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -20,6 +21,20 @@ public class Training extends GenericEntityID {
     @JoinTable(name = "training_questions", joinColumns = @JoinColumn(name = "training_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> questions;
+
+    public Training() {
+        questions = new HashSet<>();
+    }
+
+    @PrePersist
+    public void setCreated() {
+        this.created = LocalDate.now();
+    }
+
+    @PreUpdate
+    public void setUpdated() {
+        this.updated = LocalDate.now();
+    }
 
     //Jeśli użytkownik odpowie prawidłowo to score = +1
 }

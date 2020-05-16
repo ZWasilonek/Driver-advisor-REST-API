@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +15,8 @@ import java.util.Set;
 @Data
 public class Question extends GenericEntityID {
 
+    @NotNull
+    @NotBlank
     private String title;
 
     @OneToMany
@@ -22,7 +26,7 @@ public class Question extends GenericEntityID {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private MultiTypeFile multitypeFile;
+    private MultiTypeFile multiTypeFile;
 
     public Question() {
         answers = new HashSet<>();

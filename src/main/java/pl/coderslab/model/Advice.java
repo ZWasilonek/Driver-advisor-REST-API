@@ -2,10 +2,14 @@ package pl.coderslab.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -13,10 +17,20 @@ import java.util.Set;
 @Data
 public class Advice extends GenericEntityID {
 
+    @NotNull
+    @NotBlank
     private String title;
+
+    @NotNull
+    @NotBlank
     private String guide;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate created;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updated;
+
     private Integer recommendation;
     private Integer shared;
 
@@ -31,5 +45,19 @@ public class Advice extends GenericEntityID {
 
     @OneToOne
     private Training training;
+
+    @PrePersist
+    public void setCreated() {
+        this.created = LocalDate.now();
+    }
+
+    @PreUpdate
+    public void setUpdated() {
+        this.updated = LocalDate.now();
+    }
+
+    public Advice() {
+        this.tags = new HashSet<>();
+    }
 
 }
