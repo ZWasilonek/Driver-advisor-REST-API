@@ -33,12 +33,12 @@ public class QuestionController {
     }
 
     @GetMapping("/find/{id}")
-    public Question findById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
+    public Question findQuestionById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
         return questionService.findById(questionId);
     }
 
     @PutMapping("/update/{id}")
-    public Question updateById(@PathVariable("id") Long questionId,
+    public Question updateQuestionById(@PathVariable("id") Long questionId,
                                @Valid @RequestBody Answer answer1,
                                @Valid @RequestBody Answer answer2,
                                @Valid @RequestBody Answer answer3) throws EntityNotFoundException {
@@ -48,7 +48,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
+    public void removeQuestionById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
         questionService.removeById(questionId);
     }
 

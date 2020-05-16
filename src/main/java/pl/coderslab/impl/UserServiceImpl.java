@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Service
-public class UserServiceImpl extends GenericServiceImpl<User, UserRepository> implements UserService<User> {
+public class UserServiceImpl extends GenericServiceImpl<User, UserRepository> implements UserService {
 
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;

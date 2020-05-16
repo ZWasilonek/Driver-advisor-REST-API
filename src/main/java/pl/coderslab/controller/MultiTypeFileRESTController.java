@@ -32,12 +32,12 @@ public class MultiTypeFileRESTController {
     }
 
     @GetMapping("/find/{id}")
-    public MultiTypeFile findById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+    public MultiTypeFile findFileById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.findById(fileId);
     }
 
     @PostMapping(path = "/update/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
-    public MultiTypeFile updateById(@RequestPart("file") MultipartFile file,
+    public MultiTypeFile updateFileById(@RequestPart("file") MultipartFile file,
                                        @PathVariable("id") Long fileId) {
         MultiTypeFile foundedImg = multiTypeFileService.findById(fileId);
         multiTypeFileService.updateFile(file, fileId);
@@ -45,7 +45,7 @@ public class MultiTypeFileRESTController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteById(@PathVariable("id") Long imageId) throws EntityNotFoundException {
+    public void deleteFileById(@PathVariable("id") Long imageId) throws EntityNotFoundException {
         multiTypeFileService.findById(imageId);
     }
 
