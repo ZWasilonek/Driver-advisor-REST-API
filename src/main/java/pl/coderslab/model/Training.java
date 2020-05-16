@@ -2,6 +2,7 @@ package pl.coderslab.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
@@ -14,8 +15,11 @@ import java.util.Set;
 @Data
 public class Training extends GenericEntityID {
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate created;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updated;
+    private Integer score;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "training_questions", joinColumns = @JoinColumn(name = "training_id"),
@@ -36,5 +40,4 @@ public class Training extends GenericEntityID {
         this.updated = LocalDate.now();
     }
 
-    //Jeśli użytkownik odpowie prawidłowo to score = +1
 }
