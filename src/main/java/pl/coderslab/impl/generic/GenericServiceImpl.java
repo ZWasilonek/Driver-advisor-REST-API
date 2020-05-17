@@ -1,6 +1,5 @@
 package pl.coderslab.impl.generic;
 
-import lombok.var;
 import org.hibernate.service.spi.ServiceException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
