@@ -89,18 +89,14 @@ public abstract class GenericServiceImpl<D,T,R extends JpaRepository<T, Long>> i
     @Override
     public void removeById(Long id) throws EntityNotFoundException {
 //        repository.findById(id).ifPresent(object -> repository.delete(object));
-        T entity = repository.findById(id).orElse(null);
-        if (entity == null) {
-            throw new EntityNotFoundException(getGenericDTOTypeClass(), "id", id.toString());
-        }
+        T entity = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(getGenericDTOTypeClass(), "id", id.toString()));
     }
 
     @Override
     public D findById(Long id) throws EntityNotFoundException {
-        T entity = repository.findById(id).orElse(null);
-        if (entity == null) {
-            throw new EntityNotFoundException(getGenericDTOTypeClass(), "id", id.toString());
-        }
+        T entity = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(getGenericDTOTypeClass(), "id", id.toString()));
         return convertToObjectDTO(entity, getGenericDTOTypeClass());
     }
 
