@@ -19,14 +19,10 @@ public class Question extends GenericEntityID {
     @NotBlank
     private String title;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "question_answers", joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "answer_id"))
     private Set<Answer> answers;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private MultiTypeFile multiTypeFile;
 
     public Question() {
         answers = new HashSet<>();

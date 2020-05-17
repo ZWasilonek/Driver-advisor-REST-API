@@ -1,8 +1,8 @@
 package pl.coderslab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.AnswerServiceImpl;
 import pl.coderslab.model.Answer;
@@ -10,7 +10,9 @@ import pl.coderslab.model.Answer;
 import javax.validation.Valid;
 import java.util.Set;
 
-@Controller
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
+@RestController
 @RequestMapping("/answer")
 public class AnswerRESTController {
 
@@ -21,12 +23,13 @@ public class AnswerRESTController {
         this.answerService = answerService;
     }
 
-    @PostMapping("/create")
-    public Answer createAnswer(@Valid @RequestBody Answer answer) {
-        return answerService.create(answer);
+    @RequestMapping(path = "/create", method = RequestMethod.POST, consumes = MULTIPART_FORM_DATA_VALUE)
+    public Answer createAnswer(@Valid @RequestBody Answer answer,
+                               @RequestParam("file") MultipartFile file) {
+        return answerService.createAnswer(answer, file);
     }
 
-    @GetMapping("/find'{id}")
+    @GetMapping("/find/{id}")
     public Answer findAnswerById(@PathVariable("id") Long answerId) throws EntityNotFoundException {
         return answerService.findById(answerId);
     }
@@ -43,7 +46,7 @@ public class AnswerRESTController {
 
     @GetMapping("/findCorrect/{questionId}")
     public Set<Answer> findCorrectAnswersByQuestionId(@PathVariable("questionId") Long questionId) throws EntityNotFoundException {
-        return answerService.findCorrectAnswersByQuestionId(questionId);
+        return answerService.getCorrectAnswersByQuestionId(questionId);
     }
 
 }
