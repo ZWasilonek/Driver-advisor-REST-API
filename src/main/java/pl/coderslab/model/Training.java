@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
-@Entity(name = "trainings")
+@Entity(name = "training")
 @Data
 public class Training extends GenericEntityID {
 
@@ -25,6 +25,9 @@ public class Training extends GenericEntityID {
     @JoinTable(name = "training_questions", joinColumns = @JoinColumn(name = "training_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> questions;
+
+    @Column(name = "file_id")
+    private Long fileId;
 
     public Training() {
         questions = new HashSet<>();

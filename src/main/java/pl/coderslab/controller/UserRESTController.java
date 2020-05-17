@@ -2,8 +2,8 @@ package pl.coderslab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.dto.UserDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.UserServiceImpl;
 import pl.coderslab.model.User;
@@ -13,29 +13,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserRESTController {
 
     private final UserServiceImpl userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserRESTController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
     @PostMapping("/create")
-    public User createUser(@Valid @RequestBody User user) {
-        return userService.saveUser(user);
+    public UserDto createUser(@Valid @RequestBody UserDto userDto) {
+        return userService.saveUser(userDto);
     }
 
     @GetMapping("/find/{id}")
-    public User getUserById(@PathVariable(value = "id") Long userId) throws EntityNotFoundException {
+    public UserDto getUserById(@PathVariable(value = "id") Long userId) throws EntityNotFoundException {
         return userService.findById(userId);
     }
 
     @PutMapping("/update/{id}")
-    public User updateUser(@PathVariable(value = "id") Long userId,
+    public UserDto updateUser(@PathVariable(value = "id") Long userId,
                              @Valid @RequestBody User userDetails) throws EntityNotFoundException {
-        User foundedUser = userService.findById(userId);
+        UserDto foundedUser = userService.findById(userId);
         if (foundedUser != null) {
             foundedUser.setUsername(userDetails.getUsername());
             foundedUser.setPassword(userDetails.getPassword());
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/findAll")
-    public List<User> getAllUsers() throws EntityNotFoundException {
+    public List<UserDto> getAllUsers() throws EntityNotFoundException {
         return userService.findAll();
     }
 

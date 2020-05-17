@@ -40,8 +40,9 @@ public class Advice extends GenericEntityID {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags;
 
-    @OneToOne
-    private MultiTypeFile multitypeFile;
+//    @OneToOne
+    @Column(name = "file_id")
+    private Long multiTypeFileId;
 
     @OneToOne
     private Training training;

@@ -2,6 +2,7 @@ package pl.coderslab.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.coderslab.dto.UserDto;
 import pl.coderslab.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.User;
 import pl.coderslab.model.Role;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Service
-public class UserServiceImpl extends GenericServiceImpl<User, UserRepository> implements UserService {
+public class UserServiceImpl extends GenericServiceImpl<UserDto, User, UserRepository> implements UserService {
 
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -26,17 +27,17 @@ public class UserServiceImpl extends GenericServiceImpl<User, UserRepository> im
     }
 
     @Override
-    public User findByUserName(String username) {
-        return repository.findByUsername(username);
+    public UserDto findByUserName(String username) {
+        return convertToObjectDTO(repository.findByUsername(username), UserDto.class);
     }
 
     @Override
-    public User saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(1);
+    public UserDto saveUser(UserDto userDto) {
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.setEnabled(1);
         Role userRole = roleRepository.findByName("ROLE_USER");
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-        return this.create(user);
+        userDto.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        return this.create(userDto);
     }
 
 }

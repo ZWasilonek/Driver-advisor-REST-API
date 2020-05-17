@@ -26,7 +26,7 @@ public class User extends GenericEntityID {
     private int enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_trainig", joinColumns = @JoinColumn(name = "user_id"),
+    @JoinTable(name = "user_training", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "training_id"))
     private Set<Training> training;
 

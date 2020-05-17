@@ -1,9 +1,9 @@
 package pl.coderslab.controller;
 
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.TrainingServiceImpl;
-import pl.coderslab.model.Training;
 
 import javax.validation.Valid;
 
@@ -18,17 +18,17 @@ public class TrainingRESTController {
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
-    public Training createTraining(@Valid @RequestBody Training training) {
-        return trainingService.create(training);
+    public TrainingDto createTraining(@Valid @RequestBody TrainingDto trainingDto) {
+        return trainingService.create(trainingDto);
     }
 
     @GetMapping("/find/{id}")
-    public Training findTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
+    public TrainingDto findTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
         return trainingService.findById(trainingId);
     }
 
     @PutMapping("/update/{id}")
-    public Training updateTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
+    public TrainingDto updateTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
         return trainingService.update(trainingService.findById(trainingId));
     }
 

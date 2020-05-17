@@ -1,10 +1,11 @@
 package pl.coderslab.service;
 
+import pl.coderslab.dto.QuestionDto;
 import pl.coderslab.model.Question;
 import pl.coderslab.service.generic.GenericService;
 
-public interface QuestionService extends GenericService<Question> {
+public interface QuestionService extends GenericService<QuestionDto, Question> {
 
-    Question create(Question question);
+    QuestionDto create(QuestionDto question);
 
 }

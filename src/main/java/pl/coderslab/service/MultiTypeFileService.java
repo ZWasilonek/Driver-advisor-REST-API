@@ -1,15 +1,16 @@
 package pl.coderslab.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.service.generic.GenericService;
 
-public interface MultiTypeFileService extends GenericService<MultiTypeFile> {
+public interface MultiTypeFileService extends GenericService<MultiTypeFileDto, MultiTypeFile> {
 
-    MultiTypeFile findByFileName(String fileName);
+    MultiTypeFileDto findByFileName(String fileName);
 
-    MultiTypeFile saveFile(MultipartFile file);
+    MultiTypeFileDto saveFile(MultipartFile file);
 
-    MultiTypeFile updateFile(MultipartFile file, Long imageId);
+    MultiTypeFileDto updateFile(MultipartFile file, Long imageId);
 
 }
