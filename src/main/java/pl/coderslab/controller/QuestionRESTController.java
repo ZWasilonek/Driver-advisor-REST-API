@@ -1,27 +1,33 @@
 package pl.coderslab.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.dto.QuestionDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.QuestionServiceImpl;
 import pl.coderslab.model.Answer;
+import pl.coderslab.service.AnswerService;
 import pl.coderslab.service.QuestionService;
 
 import javax.validation.Valid;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/question")
 public class QuestionRESTController {
 
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @Autowired
-    public QuestionRESTController(QuestionService questionService) {
+    public QuestionRESTController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @PostMapping("/create")
@@ -44,6 +50,10 @@ public class QuestionRESTController {
         questionService.removeById(questionId);
     }
 
-
+    @ApiOperation(value = "View a set of correct answers by question id", response = Set.class)
+    @GetMapping("/findCorrect/{id}")
+    public Set<AnswerDto> findCorrectAnswersByQuestionId(@PathVariable("id") Long questionId) throws EntityNotFoundException {
+        return answerService.getCorrectAnswersByQuestionId(questionId);
+    }
 
 }

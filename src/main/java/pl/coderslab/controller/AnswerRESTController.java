@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -55,11 +56,13 @@ public class AnswerRESTController {
         answerService.removeById(answerId);
     }
 
+    @ApiOperation(value = "View a set of correct answers by question id", response = Set.class)
     @GetMapping("/findCorrect/{id}")
     public Set<AnswerDto> findCorrectAnswersByQuestionId(@PathVariable("id") Long questionId) throws EntityNotFoundException {
         return answerService.getCorrectAnswersByQuestionId(questionId);
     }
 
+    @ApiOperation(value = "Upload a file and receive url for view", response = URL.class)
     @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
     public URL uploadFile(@RequestParam("file") MultipartFile file) throws MalformedURLException {
         MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
@@ -70,11 +73,13 @@ public class AnswerRESTController {
         return new URL(createdURL);
     }
 
+    @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
     @GetMapping("/showFile/{id}")
     public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
+    @ApiOperation(value = "Download a file by file id", response = URL.class)
     @GetMapping("/downloadFile/{id}")
     public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId,
                                           HttpServletRequest request) {
