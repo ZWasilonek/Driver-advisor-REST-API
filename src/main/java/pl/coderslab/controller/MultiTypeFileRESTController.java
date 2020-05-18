@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.MultiTypeFileServiceImpl;
@@ -12,6 +13,8 @@ import org.springframework.core.io.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.springframework.http.MediaType.*;
 
@@ -27,13 +30,18 @@ public class MultiTypeFileRESTController {
     }
 
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
-    public MultiTypeFileDto uploadFile(@RequestParam("file") MultipartFile file) {
-        return multiTypeFileService.saveFile(file);
+    public MultiTypeFileDto uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws MalformedURLException {
+        MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
+        fileDto.setUploadDir(new URL(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileDto.getFileName())
+                .toUriString()));
+        return fileDto;
     }
 
     @GetMapping(value = "/show/{id}")
     public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
-        return multiTypeFileService.upload(fileId);
+        return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
     @GetMapping("/find/{id}")
@@ -43,7 +51,7 @@ public class MultiTypeFileRESTController {
 
     @PostMapping(path = "/update/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
     public MultiTypeFileDto updateFileById(@RequestPart("file") MultipartFile file,
-                                       @PathVariable("id") Long fileId) {
+                                           @PathVariable("id") Long fileId) {
         MultiTypeFileDto foundedImg = multiTypeFileService.findById(fileId);
         multiTypeFileService.updateFile(file, fileId);
         return foundedImg;
@@ -54,33 +62,12 @@ public class MultiTypeFileRESTController {
         multiTypeFileService.findById(imageId);
     }
 
-
-
-//    @PostMapping("/uploadFile")
-//    public MultiTypeFile uploadFile(@RequestParam("file") MultipartFile file,
-//                                    @RequestParam("objectType") String objectType,
-//                                    @RequestParam("entityId") Long entityId) {
-//        String fileName = multiTypeFileService.storeFile(file, entityId, objectType);
-//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path("/downloadFile/")
-//                .path(fileName)
-//                .toUriString();
-//        return new MultiTypeFile(fileName,file.getContentType(),file.getSize(), fileDownloadUri);
-//    }
-
-//    @PostMapping("/assignFileToObject")
-//    public MultiTypeFile assignFileToObject(@RequestParam("objectType") String objectType,
-//                                            @RequestParam("entityId") Long entityId) {
-//        return multiTypeFileService.saveFileWithObjectId(objectType, entityId);
-//    }
-
-        @GetMapping("/downloadFile")
+    @GetMapping("/downloadFile")
     public ResponseEntity<Resource> downloadFile(@RequestParam("entityId") Long entityId,
                                                  HttpServletRequest request) {
-
         String fileName = multiTypeFileService.getFileName(entityId);
         Resource resource = null;
-        if(fileName !=null && !fileName.isEmpty()) {
+        if (fileName != null && !fileName.isEmpty()) {
             try {
                 resource = multiTypeFileService.loadFileAsResource(fileName);
             } catch (Exception e) {
@@ -94,7 +81,7 @@ public class MultiTypeFileRESTController {
                 //logger.info("Could not determine file type.");
             }
             // Fallback to the default content type if type could not be determined
-            if(contentType == null) {
+            if (contentType == null) {
                 contentType = "application/octet-stream";
             }
             return ResponseEntity.ok()
@@ -106,10 +93,15 @@ public class MultiTypeFileRESTController {
         }
     }
 
+    @PostMapping("/createFromURL/{url}")
+    public void createFromURL(@PathVariable("url") String url) {
+        multiTypeFileService.saveFromURL(url);
+    }
+
     @GetMapping("/url/{id}")
-    public String getURL(@PathVariable("id") Long id, HttpServletRequest request) {
-//        return (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        return request.getRequestURL().toString();
+    public ResponseEntity<?> getURL(@PathVariable("id") Long fileId, HttpServletRequest request) throws MalformedURLException {
+//        return (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);;
+        return multiTypeFileService.uploadFromURL(fileId, new URL(request.getRequestURL().toString()));
     }
 
 }

@@ -14,7 +14,7 @@ import java.net.URL;
 public class AnswerDto {
 
     @Id
-    @JsonIgnore
+//    @JsonIgnore
     private Long id;
 
     @NotNull

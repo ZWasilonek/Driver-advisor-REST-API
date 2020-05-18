@@ -1,5 +1,8 @@
 package pl.coderslab.impl;
 
+import org.apache.commons.io.FileUtils;
+import org.springframework.util.StringUtils;
+import org.apache.jasper.tagplugins.jstl.core.Url;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +15,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
+import pl.coderslab.errorhandler.exception.FileStorageException;
 import pl.coderslab.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.repository.MultiTypeFileRepository;
 import pl.coderslab.service.MultiTypeFileService;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -81,7 +91,7 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
+            if (resource.exists()) {
                 return resource;
             } else {
                 throw new FileNotFoundException("File not found " + fileName);
@@ -96,6 +106,27 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
     }
 
 
+    public void saveFromURL(String url) {
+//        try {
+//            URL fileURL = new URL(url);
+//            try (InputStream in = fileURL.openStream()) {
+//                Files.copy(in, fileStorageLocation, StandardCopyOption.REPLACE_EXISTING);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+            URL fileURL = new URL(url);
+            File file = new File(fileStorageLocation.toString());
+            FileUtils.copyURLToFile(fileURL, file);
+        } catch (IOException e) {
+            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Override
     public MultiTypeFileDto findByFileName(String fileName) {
         return convertToObjectDTO(repository.findByFileName(fileName), MultiTypeFileDto.class);
@@ -104,41 +135,48 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
     @Override
     public MultiTypeFileDto saveFile(MultipartFile file) {
         MultiTypeFileDto multiTypeFileDto = new MultiTypeFileDto();
+        MultiTypeFileDto savedDto = null;
         try {
             if (!file.isEmpty()) {
-                multiTypeFileDto.setFileName(file.getOriginalFilename());
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+                if (fileName.contains(".."))
+                    throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+                multiTypeFileDto.setFileName(fileName);
                 multiTypeFileDto.setFileType(file.getContentType());
                 multiTypeFileDto.setSize(file.getSize());
                 multiTypeFileDto.setData(file.getBytes());
-                this.create(multiTypeFileDto);
+//                multiTypeFileDto.setUploadDir();
+                savedDto = this.create(multiTypeFileDto);
                 saveImgIntoDir(file);
                 logger.debug("Single file upload!");
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return multiTypeFileDto;
+        return savedDto;
     }
 
     @Override
     public MultiTypeFileDto updateFile(MultipartFile file, Long fileId) throws EntityNotFoundException {
         MultiTypeFileDto multiTypeFileDto = findById(fileId);
+        MultiTypeFileDto updatedDto = null;
         try {
             if (!file.isEmpty() && multiTypeFileDto != null) {
                 multiTypeFileDto.setFileName(file.getOriginalFilename());
                 multiTypeFileDto.setFileType(file.getContentType());
                 multiTypeFileDto.setData(file.getBytes());
-                this.update(multiTypeFileDto);
+                updatedDto = this.update(multiTypeFileDto);
 //                saveImgIntoDir(file);
                 logger.debug("Single file upload!");
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return multiTypeFileDto;
+        return updatedDto;
     }
 
-    public ResponseEntity<?> upload(Long fileId) throws EntityNotFoundException {
+    @Override
+    public ResponseEntity<?> loadIntoBrowser(Long fileId) throws EntityNotFoundException {
         MultiTypeFileDto foundedFile = findById(fileId);
         if (foundedFile != null) {
             byte[] imageByte = foundedFile.getData();
@@ -146,6 +184,29 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
                     .body(imageByte);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    public ResponseEntity<?> uploadFromURL(Long fileId, URL url) throws EntityNotFoundException {
+        MultiTypeFileDto foundedFile = findById(fileId);
+        if (foundedFile != null) {
+            byte[] imageByte = foundedFile.getData();
+            return ok().contentType(MediaType.valueOf(foundedFile.getFileType()))
+                    .body(imageByte);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public Resource loadFileAsResource(Long fileId) {
+        MultiTypeFileDto fileDto = this.findById(fileId);
+        Resource resource = null;
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileDto.getFileName()).normalize();
+            resource = new UrlResource(filePath.toUri());
+        } catch (MalformedURLException e) {
+            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return resource;
     }
 
     private void saveImgIntoDir(MultipartFile file) {
@@ -172,6 +233,8 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         return convertToObjectDTO(multiTypeFile, MultiTypeFileDto.class);
     }
 
+
+
 //    public void setEntityId(String objectType, Long entityId, Long fileId) throws EntityNotFoundException {
 //        MultiTypeFile multiTypeFile = new MultiTypeFile();
 //        String lowerObjectType = objectType.toLowerCase();
@@ -193,4 +256,4 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
 //        }
 //        this.update(multiTypeFile);
 //    }
-}
+    }

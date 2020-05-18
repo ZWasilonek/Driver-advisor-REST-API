@@ -27,4 +27,9 @@ public class AnswerServiceImpl extends GenericServiceImpl<AnswerDto, Answer, Ans
                 .collect(Collectors.toSet());
     }
 
+//    public AnswerDto createAnswer(AnswerDto dto) {
+//        AnswerDto savedDto = this.create(dto);
+//        savedDto.setFileURL();
+//    }
+
 }

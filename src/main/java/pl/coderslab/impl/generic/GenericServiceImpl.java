@@ -48,18 +48,19 @@ public abstract class GenericServiceImpl<D,T,R extends JpaRepository<T, Long>> i
 
     @Override
     public D create(D dto) {
-        repository.save(convertToEntity(dto, getGenericEntityTypeClass()));
-        return dto;
+        T entity = repository.save(convertToEntity(dto, getGenericEntityTypeClass()));
+        return convertToObjectDTO(entity, getGenericDTOTypeClass());
     }
 
     @Override
     public D update(D dto) {
         T e = convertToEntity(dto, getGenericEntityTypeClass());
-        T model = repository.findById(((GenericEntityID)e).getId()).orElse(null);
+        T model = repository.findById(((GenericEntityID)e).getId()).orElseThrow(
+                () -> new EntityNotFoundException(getGenericDTOTypeClass(), "id", ((GenericEntityID)e).getId().toString()));
         if (model != null) {
             ((GenericEntityID)e).setId(((GenericEntityID) model).getId());
             repository.save(e);
-            return dto;
+            return convertToObjectDTO(model, getGenericDTOTypeClass());
         }
         throw new ServiceException("Cannot find item to update");
     }
@@ -88,8 +89,8 @@ public abstract class GenericServiceImpl<D,T,R extends JpaRepository<T, Long>> i
     @Override
     public void removeById(Long id) throws EntityNotFoundException {
 //        repository.findById(id).ifPresent(object -> repository.delete(object));
-        T entity = repository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException(getGenericDTOTypeClass(), "id", id.toString()));
+        repository.delete(repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(getGenericDTOTypeClass(), "id", id.toString())));
     }
 
     @Override

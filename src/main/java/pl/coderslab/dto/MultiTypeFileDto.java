@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.net.URL;
 
 @Getter
 @Setter
@@ -23,21 +24,13 @@ public class MultiTypeFileDto {
     @JsonIgnore
     private String fileType;
 
-    @JsonIgnore
-    private String uploadDir;
+    private URL uploadDir;
 
     @JsonIgnore
     private Long size;
 
     @JsonIgnore
     private byte[] data;
-
-    public MultiTypeFileDto(String fileName, String fileType, Long size, String uploadDir) {
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.size = size;
-        this.uploadDir = uploadDir;
-    }
 
     public MultiTypeFileDto() {}
 

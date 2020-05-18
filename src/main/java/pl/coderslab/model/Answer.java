@@ -25,6 +25,6 @@ public class Answer extends GenericEntityID {
     private Boolean isCorrect;
 
     @Column(name = "file_id")
-    private Long multiTypeFileId;
+    private Long fileId;
 
 }
