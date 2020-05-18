@@ -16,13 +16,13 @@ public class QuestionServiceImpl extends GenericServiceImpl<QuestionDto, Questio
         super(repository);
     }
 
-    @Override
-    public QuestionDto create(QuestionDto questionDto) {
-        if (questionDto != null && questionDto.getAnswers() != null) {
-            this.create(questionDto);
-            log.debug("Question created!");
-        }
-        return questionDto;
-    }
+//    @Override
+//    public QuestionDto create(QuestionDto questionDto) {
+//        if (questionDto != null && questionDto.getAnswers() != null) {
+//
+//            log.debug("Question created!");
+//        }
+//        return questionDto;
+//    }
 
 }

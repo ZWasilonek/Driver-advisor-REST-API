@@ -27,7 +27,7 @@ public class TrainingDto {
 
     @NotNull
     @NotEmpty
-    private Set<Question> questions;
+    private Set<QuestionDto> questions;
 
     private URL urlToFile;
 

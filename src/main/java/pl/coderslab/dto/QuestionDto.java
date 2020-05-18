@@ -26,7 +26,7 @@ public class QuestionDto {
 
     @NotNull
     @NotEmpty
-    private Set<Answer> answers;
+    private Set<AnswerDto> answers;
 
     public QuestionDto() {
         answers = new HashSet<>();

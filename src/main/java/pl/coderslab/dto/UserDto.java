@@ -31,7 +31,7 @@ public class UserDto {
     @JsonIgnore
     private int enabled;
 
-    private Set<Training> training;
+    private Set<TrainingDto> training;
 
     @JsonIgnore
     private Set<Role> roles;

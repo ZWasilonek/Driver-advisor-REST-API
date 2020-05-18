@@ -6,6 +6,7 @@ import pl.coderslab.dto.QuestionDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.impl.QuestionServiceImpl;
 import pl.coderslab.model.Answer;
+import pl.coderslab.service.QuestionService;
 
 import javax.validation.Valid;
 
@@ -16,19 +17,15 @@ import java.util.HashSet;
 @RequestMapping("/question")
 public class QuestionRESTController {
 
-    private final QuestionServiceImpl questionService;
+    private final QuestionService questionService;
 
     @Autowired
-    public QuestionRESTController(QuestionServiceImpl questionService) {
+    public QuestionRESTController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
     @PostMapping("/create")
-    public QuestionDto createQuestion(@Valid @RequestBody QuestionDto questionDto,
-                                      @Valid @RequestBody Answer answer1,
-                                      @Valid @RequestBody Answer answer2,
-                                      @Valid @RequestBody Answer answer3) {
-        questionDto.setAnswers(new HashSet<Answer>(Arrays.asList(answer1, answer2, answer3)));
+    public QuestionDto createQuestion(@Valid @RequestBody QuestionDto questionDto) {
         return questionService.create(questionDto);
     }
 
@@ -37,19 +34,16 @@ public class QuestionRESTController {
         return questionService.findById(questionId);
     }
 
-    @PutMapping("/update/{id}")
-    public QuestionDto updateQuestionById(@PathVariable("id") Long questionId,
-                               @Valid @RequestBody Answer answer1,
-                               @Valid @RequestBody Answer answer2,
-                               @Valid @RequestBody Answer answer3) throws EntityNotFoundException {
-        QuestionDto founded = questionService.findById(questionId);
-        founded.setAnswers(new HashSet<Answer>(Arrays.asList(answer1, answer2, answer3)));
-        return questionService.update(founded);
+    @PutMapping("/update")
+    public QuestionDto updateQuestionById(@RequestBody QuestionDto questionDto) throws EntityNotFoundException {
+        return questionService.update(questionDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public void removeQuestionById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
         questionService.removeById(questionId);
     }
+
+
 
 }
