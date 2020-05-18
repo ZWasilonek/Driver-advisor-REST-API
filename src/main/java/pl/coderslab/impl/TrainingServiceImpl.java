@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.Training;
@@ -26,6 +27,24 @@ public class TrainingServiceImpl extends GenericServiceImpl<TrainingDto, Trainin
         this.multiTypeFileService = multiTypeFileService;
     }
 
+    //DLACZEGO SCORE = MAX SCORE ?
+    @Override
+    public TrainingDto createTraining(TrainingDto trainingDto) {
+        trainingDto.setMaxScore(getCorrectAnswers(trainingDto).size());
+        return this.create(trainingDto);
+    }
+
+    @Override
+    public Set<AnswerDto> getCorrectAnswers(TrainingDto trainingDto) {
+        Set<AnswerDto> trueAnswers = new HashSet<>();
+        trainingDto.getQuestions()
+                .forEach(questionDto -> questionDto.getAnswers().stream()
+                        .filter(answerDto -> answerDto.getIsCorrect().equals(true))
+                        .forEach(trueAnswers::add));
+        return trueAnswers;
+    }
+
+    //DLACZEGO NIE WCZYTUJE FILES ?
     @Override
     public Set<URL> uploadFiles(MultipartFile[] files) {
         Set<URL> urls = new HashSet<>();

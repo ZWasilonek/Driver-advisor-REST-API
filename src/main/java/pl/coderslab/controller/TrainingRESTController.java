@@ -27,7 +27,7 @@ public class TrainingRESTController {
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public TrainingDto createTraining(@Valid @RequestBody TrainingDto trainingDto) {
-        return trainingService.create(trainingDto);
+        return trainingService.createTraining(trainingDto);
     }
 
     @GetMapping("/find/{id}")
@@ -36,7 +36,7 @@ public class TrainingRESTController {
     }
 
     @PutMapping("/update")
-    public TrainingDto updateTrainingById(@RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
+    public TrainingDto updateTraining(@RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
         return trainingService.update(trainingDto);
     }
 

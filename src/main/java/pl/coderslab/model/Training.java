@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,9 +18,13 @@ public class Training extends GenericEntityID {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate created;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updated;
-    private Integer score;
+
+    @NotNull
+    @Column(name = "max_score")
+    private Integer maxScore;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "training_questions", joinColumns = @JoinColumn(name = "training_id"),

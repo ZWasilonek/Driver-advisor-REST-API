@@ -47,8 +47,8 @@ public class AnswerRESTController {
     }
 
     @PutMapping("/update")
-    public AnswerDto update(@RequestBody AnswerDto answerDto) {
-        return answerService.update(answerDto);
+    public AnswerDto update(@RequestBody AnswerDto answerDto) throws EntityNotFoundException {
+        return answerService.updateAnswer(answerDto);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -66,17 +66,22 @@ public class AnswerRESTController {
     @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
     public URL uploadFile(@RequestParam("file") MultipartFile file) throws MalformedURLException {
         MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
-        String createdURL = ServletUriComponentsBuilder.fromCurrentContextPath()
+        return new URL(ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/answer/showFile/")
                 .path(fileDto.getId().toString())
-                .toUriString();
-        return new URL(createdURL);
+                .toUriString());
     }
 
     @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
     @GetMapping("/showFile/{id}")
     public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.loadIntoBrowser(fileId);
+    }
+
+    //NIE DZIAŁA - trzeba zapisać url do bazy danych jednak ?
+    @GetMapping("/getFileURL/{id}")
+    public URL getFileURLbyFileID(@PathVariable("id") Long answerId) throws EntityNotFoundException {
+        return answerService.getURLByFileId(answerId);
     }
 
     @ApiOperation(value = "Download a file by file id", response = URL.class)

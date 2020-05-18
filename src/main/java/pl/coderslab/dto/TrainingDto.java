@@ -25,6 +25,8 @@ public class TrainingDto {
 
     private Integer score;
 
+    private Integer maxScore;
+
     @NotNull
     @NotEmpty
     private Set<QuestionDto> questions;
