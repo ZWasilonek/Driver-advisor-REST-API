@@ -64,8 +64,8 @@ public class AnswerRESTController {
     public URL uploadFile(@RequestParam("file") MultipartFile file) throws MalformedURLException {
         MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
         String createdURL = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileDto.getId().toString() + "/")
+                .path("/answer/showFile/")
+                .path(fileDto.getId().toString())
                 .toUriString();
         return new URL(createdURL);
     }
