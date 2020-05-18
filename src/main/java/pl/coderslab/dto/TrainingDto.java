@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import pl.coderslab.model.Question;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -29,7 +29,7 @@ public class TrainingDto {
     @NotEmpty
     private Set<QuestionDto> questions;
 
-    private URL urlToFile;
+    private List<URL> filesURL;
 
     @JsonIgnore
     private LocalDate created;

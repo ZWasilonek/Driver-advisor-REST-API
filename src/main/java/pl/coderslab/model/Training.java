@@ -26,9 +26,6 @@ public class Training extends GenericEntityID {
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> questions;
 
-    @Column(name = "file_id")
-    private Long fileId;
-
     public Training() {
         questions = new HashSet<>();
     }
