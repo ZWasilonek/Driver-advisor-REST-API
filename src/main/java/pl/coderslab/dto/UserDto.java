@@ -31,6 +31,8 @@ public class UserDto {
     @JsonIgnore
     private int enabled;
 
+    private Integer score;
+
     private Set<TrainingDto> training;
 
     @JsonIgnore

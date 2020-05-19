@@ -37,4 +37,10 @@ public class TrainingController {
         trainingService.removeById(trainingId);
     }
 
+    @PostMapping("/solveTraining/{id}")
+    public TrainingDto sendUserTrainingSolutions(@PathVariable("id") Long userId,
+                                             @RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
+        return trainingService.sentUserTrainingSolutions(userId, trainingDto);
+    }
+
 }

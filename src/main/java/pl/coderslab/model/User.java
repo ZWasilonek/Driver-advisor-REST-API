@@ -25,6 +25,8 @@ public class User extends GenericEntityID {
 
     private int enabled;
 
+    private Integer score;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_training", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "training_id"))

@@ -14,5 +14,5 @@ public interface TrainingService extends GenericService<TrainingDto, Training> {
     Set<URL> uploadFiles(MultipartFile[] files);
     TrainingDto createTraining(TrainingDto trainingDto);
     Set<AnswerDto> getCorrectAnswers(TrainingDto trainingDto);
-
+    TrainingDto sentUserTrainingSolutions(Long userId, TrainingDto solvedTraining);
 }

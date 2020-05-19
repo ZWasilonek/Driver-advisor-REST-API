@@ -23,8 +23,6 @@ public class TrainingDto {
     @JsonIgnore
     private Long id;
 
-    private Integer score;
-
     private Integer maxScore;
 
     @NotNull
