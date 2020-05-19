@@ -19,13 +19,13 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/question")
-public class QuestionRESTController {
+public class QuestionController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
 
     @Autowired
-    public QuestionRESTController(QuestionService questionService, AnswerService answerService) {
+    public QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
         this.answerService = answerService;
     }

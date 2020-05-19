@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +21,12 @@ import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/file")
-public class MultiTypeFileRESTController {
+public class MultiTypeFileController {
 
     private final MultiTypeFileServiceImpl multiTypeFileService;
 
     @Autowired
-    public MultiTypeFileRESTController(MultiTypeFileServiceImpl multiTypeFileService) {
+    public MultiTypeFileController(MultiTypeFileServiceImpl multiTypeFileService) {
         this.multiTypeFileService = multiTypeFileService;
     }
 
@@ -37,11 +38,6 @@ public class MultiTypeFileRESTController {
                 .path(fileDto.getFileName())
                 .toUriString()));
         return fileDto;
-    }
-
-    @GetMapping(value = "/show/{id}")
-    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
-        return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
     @GetMapping("/find/{id}")
@@ -62,35 +58,38 @@ public class MultiTypeFileRESTController {
         multiTypeFileService.findById(imageId);
     }
 
-    @GetMapping("/downloadFile")
-    public ResponseEntity<Resource> downloadFile(@RequestParam("entityId") Long entityId,
-                                                 HttpServletRequest request) {
-        String fileName = multiTypeFileService.getFileName(entityId);
-        Resource resource = null;
-        if (fileName != null && !fileName.isEmpty()) {
-            try {
-                resource = multiTypeFileService.loadFileAsResource(fileName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Try to determine file's content type
-            String contentType = null;
-            try {
-                contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-            } catch (IOException ex) {
-                //logger.info("Could not determine file type.");
-            }
-            // Fallback to the default content type if type could not be determined
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
-        } else {
-            return ResponseEntity.notFound().build();
+    @ApiOperation(value = "Upload a file and receive url for view", response = URL.class)
+    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
+    public URL uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+        MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
+        return multiTypeFileService.getURLForFile(fileDto.getId(), request);
+    }
+
+    @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
+    @GetMapping("/showFile/{id}")
+    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+        return multiTypeFileService.loadIntoBrowser(fileId);
+    }
+
+    @ApiOperation(value = "Download a file by file id", response = URL.class)
+    @GetMapping("/downloadFile/{id}")
+    public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId,
+                                          HttpServletRequest request) {
+        Resource resource = multiTypeFileService.loadFileAsResource(fileId);
+        String contentType;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
     @PostMapping("/createFromURL/{url}")
@@ -105,13 +104,3 @@ public class MultiTypeFileRESTController {
     }
 
 }
-
-
-//    @GetMapping("/find/{id}")
-//    public ResponseEntity<Image> getImg(@PathVariable("id") Long id) {
-//        Image image = imageService.findById(id);
-//        return ResponseEntity.ok().body(image);
-////                .contentType(MediaType.parseMediaType(image.getFileType()))
-////                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + image.getFileName() + "\"")
-////                .body(new ByteArrayResource(image.getData()));
-//    }

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.coderslab.impl.UserServiceImpl;
 
 @RestController
-public class HomeRESTController {
+public class HomeController {
 
     private final UserServiceImpl userService;
 
     @Autowired
-    public HomeRESTController(UserServiceImpl userService) {
+    public HomeController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

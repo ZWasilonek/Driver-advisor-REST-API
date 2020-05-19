@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.errorhandler.exception.FileStorageException;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.ParameterizedType;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -147,7 +149,7 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
                 multiTypeFileDto.setData(file.getBytes());
 //                multiTypeFileDto.setUploadDir();
                 savedDto = this.create(multiTypeFileDto);
-                saveImgIntoDir(file);
+//                saveImgIntoDir(file);
                 logger.debug("Single file upload!");
             }
         } catch (IOException e) {
@@ -232,7 +234,6 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         }
         return convertToObjectDTO(multiTypeFile, MultiTypeFileDto.class);
     }
-
 
 
 //    public void setEntityId(String objectType, Long entityId, Long fileId) throws EntityNotFoundException {

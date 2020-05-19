@@ -1,5 +1,7 @@
 package pl.coderslab.service.generic;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
 import java.util.List;
 
 public interface GenericService<D,T> {
@@ -13,5 +15,6 @@ public interface GenericService<D,T> {
     D findById(Long id);
     T convertToEntity(D dto, Class<T> outClass);
     D convertToObjectDTO(T entity, Class<D> outClass);
+    URL getURLForFile(Long fileId, HttpServletRequest request);
 
 }

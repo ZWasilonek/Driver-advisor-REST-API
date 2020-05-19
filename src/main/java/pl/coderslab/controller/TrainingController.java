@@ -15,12 +15,12 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/training")
-public class TrainingRESTController {
+public class TrainingController {
 
     private final TrainingService trainingService;
     private final MultiTypeFileService multiTypeFileService;
 
-    public TrainingRESTController(TrainingService trainingService, MultiTypeFileService multiTypeFileService) {
+    public TrainingController(TrainingService trainingService, MultiTypeFileService multiTypeFileService) {
         this.trainingService = trainingService;
         this.multiTypeFileService = multiTypeFileService;
     }

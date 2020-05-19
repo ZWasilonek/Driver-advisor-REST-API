@@ -6,18 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.model.generic.GenericEntityID;
 import pl.coderslab.service.generic.GenericService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.ParameterizedType;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class GenericServiceImpl<D,T,R extends JpaRepository<T, Long>> implements GenericService<D,T> {
 
     protected R repository;
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public GenericServiceImpl(R repository) {
@@ -108,6 +115,27 @@ public abstract class GenericServiceImpl<D,T,R extends JpaRepository<T, Long>> i
     @Override
     public T convertToEntity(D dto, Class<T> outClass) {
         return modelMapper.map(dto, outClass);
+    }
+
+    @Override
+    public URL getURLForFile(Long fileId, HttpServletRequest request) {
+        String pattern = (String) request.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+        String lastPathItem = pattern.substring(pattern.lastIndexOf('/') + 1);
+        String requestMappingPath = pattern.replace(lastPathItem, "showFile/");
+        URL urlToFile = null;
+        try {
+            urlToFile = new URL(ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(requestMappingPath)
+                    .path(fileId.toString())
+                    .toUriString());
+        } catch (MalformedURLException e) {
+            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (urlToFile == null) {
+            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return urlToFile;
     }
 
 }
