@@ -8,10 +8,8 @@ import lombok.Setter;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -27,8 +25,6 @@ public class TrainingDto {
     @NotNull
     @NotEmpty
     private Set<QuestionDto> questions;
-
-    private List<URL> filesURL;
 
     @JsonIgnore
     private LocalDate created;

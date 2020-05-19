@@ -10,7 +10,6 @@ import pl.coderslab.model.User;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +19,6 @@ import java.util.Set;
 public class AdviceDto {
 
     @Id
-    @JsonIgnore
     private Long id;
 
     @NotNull
@@ -45,8 +43,6 @@ public class AdviceDto {
     private User admin;
 
     private Set<Tag> tags;
-
-    private URL fileURL;
 
     private Long fileId;
 
