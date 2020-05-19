@@ -30,12 +30,6 @@ public class AnswerServiceImpl extends GenericServiceImpl<AnswerDto, Answer, Ans
     }
 
     @Override
-    public URL getURLByAnswerId(HttpServletRequest request, Long answerId) throws EntityNotFoundException {
-        Long fileId = this.findById(answerId).getFileId();
-        return getURLForFile(fileId, request);
-    }
-
-    @Override
     public AnswerDto updateAnswer(AnswerDto dto) throws EntityNotFoundException {
         return this.update(dto);
     }

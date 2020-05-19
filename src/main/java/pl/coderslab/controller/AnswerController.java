@@ -51,7 +51,7 @@ public class AnswerController {
 
     @GetMapping("/getURLtoFile")
     public URL getURLtoFileByAnswerId(HttpServletRequest request, Long answerId) {
-        return answerService.getURLByAnswerId(request, answerId);
+        return answerService.getURLForFile(answerId, request);
     }
 
 }
