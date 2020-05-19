@@ -20,7 +20,6 @@ import java.util.Set;
 public class TrainingDto {
 
     @Id
-    @JsonIgnore
     private Long id;
 
     private Integer maxScore;

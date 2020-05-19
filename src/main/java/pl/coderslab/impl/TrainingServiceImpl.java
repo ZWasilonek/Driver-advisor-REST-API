@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.AnswerDto;
+import pl.coderslab.dto.QuestionDto;
 import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.dto.UserDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
@@ -55,7 +56,9 @@ public class TrainingServiceImpl extends GenericServiceImpl<TrainingDto, Trainin
         Integer score = getCorrectAnswers(solvedTraining).size();
         TrainingDto unchangedTraining = this.findById(solvedTraining.getId());
         UserDto foundedUser = userService.findById(userId);
-        foundedUser.setScore(score);
+        Integer userScore = foundedUser.getScore();
+        if (userScore == null) userScore = 0;
+        foundedUser.setScore(userScore + score);
         foundedUser.getTraining().add(unchangedTraining);
         userService.update(foundedUser);
         return solvedTraining;
