@@ -92,11 +92,13 @@ public class MultiTypeFileController {
                 .body(resource);
     }
 
+    //Nie działa
     @PostMapping("/createFromURL/{url}")
     public void createFromURL(@PathVariable("url") String url) {
         multiTypeFileService.saveFromURL(url);
     }
 
+    //??
     @GetMapping("/url/{id}")
     public ResponseEntity<?> getURL(@PathVariable("id") Long fileId, HttpServletRequest request) throws MalformedURLException {
 //        return (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);;

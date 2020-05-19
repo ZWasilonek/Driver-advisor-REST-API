@@ -2,9 +2,6 @@ package pl.coderslab.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.StringUtils;
-import org.apache.jasper.tagplugins.jstl.core.Url;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.errorhandler.exception.FileStorageException;
@@ -25,15 +21,10 @@ import pl.coderslab.service.MultiTypeFileService;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.ParameterizedType;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -43,7 +34,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @Service
 public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDto, MultiTypeFile, MultiTypeFileRepository> implements MultiTypeFileService {
 
-    private final Logger logger = LoggerFactory.getLogger(MultiTypeFileServiceImpl.class);
     String UPLOADED_FOLDER = "/home/zofia/Pulpit/Coderlabs/PortfolioLab/Driver_REST_API/Driving_Advisor/Driving-advisor/src/main/webapp/resources/img/";
     private final Path fileStorageLocation = Paths.get(UPLOADED_FOLDER).toAbsolutePath().normalize();
 
@@ -52,43 +42,7 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         super(repository);
     }
 
-//    public String storeFile(MultipartFile file, Long entityId, String objectType) {
-//        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
-//        String fileName = "";
-//        try {
-//            // Check if the file's name contains invalid characters
-//            if(originalFileName.contains("..")) {
-//                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + originalFileName);
-//            }
-//            String fileExtension = "";
-//            try {
-//                fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-//            } catch(Exception e) {
-//                fileExtension = "";
-//            }
-//
-//            try {
-//                Files.createDirectories(this.fileStorageLocation);
-//            } catch (Exception ex) {
-//                throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
-//            }
-//
-//            fileName = entityId + "_" + fileExtension;
-//            // Copy file to the target location (Replacing existing file with the same name)
-//            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-//            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-//
-////            MultiTypeFile multiTypeFile = getByEntityId(entityId);
-//            multiTypeFile.setFileType(file.getContentType());
-//            multiTypeFile.setFileName(fileName);
-////            setEntityId(objectType, entityId);
-//            repository.save(multiTypeFile);
-//            return fileName;
-//        } catch (IOException ex) {
-//            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
-//        }
-//    }
-
+    // DO ściągania z url - nie działa
     public Resource loadFileAsResource(String fileName) throws Exception {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
@@ -103,11 +57,12 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         }
     }
 
+    //???
     public String getFileName(Long entityId) {
         return getByEntityId(entityId).getFileName();
     }
 
-
+    //do naprawy
     public void saveFromURL(String url) {
 //        try {
 //            URL fileURL = new URL(url);
@@ -150,7 +105,6 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
 //                multiTypeFileDto.setUploadDir();
                 savedDto = this.create(multiTypeFileDto);
 //                saveImgIntoDir(file);
-                logger.debug("Single file upload!");
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -169,7 +123,6 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
                 multiTypeFileDto.setData(file.getBytes());
                 updatedDto = this.update(multiTypeFileDto);
 //                saveImgIntoDir(file);
-                logger.debug("Single file upload!");
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -188,6 +141,7 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    //Do naprawy
     public ResponseEntity<?> uploadFromURL(Long fileId, URL url) throws EntityNotFoundException {
         MultiTypeFileDto foundedFile = findById(fileId);
         if (foundedFile != null) {
@@ -216,7 +170,6 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
         Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
         try {
             file.transferTo(path);
-            logger.debug("file saved into the path");
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -257,4 +210,4 @@ public class MultiTypeFileServiceImpl extends GenericServiceImpl<MultiTypeFileDt
 //        }
 //        this.update(multiTypeFile);
 //    }
-    }
+}
