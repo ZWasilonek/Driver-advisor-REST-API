@@ -6,15 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.dto.QuestionDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import pl.coderslab.impl.QuestionServiceImpl;
-import pl.coderslab.model.Answer;
 import pl.coderslab.service.AnswerService;
 import pl.coderslab.service.QuestionService;
 
 import javax.validation.Valid;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 @RestController

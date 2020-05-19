@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
 
 import static org.springframework.http.MediaType.*;
 
@@ -91,6 +92,14 @@ public class MultiTypeFileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+
+    //NIE WCZYTUJE PLIKÓW - jak naprawisz to zamień z
+    //    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
+//    @ApiOperation(value = "Upload files and receive list of urls for view", response = URL.class)
+//    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+//    public Set<URL> uploadFile(@RequestParam("files") MultipartFile[] files) {
+//        return multiTypeFileService.uploadFiles(files);
+//    }
 
     //Nie działa
     @PostMapping("/createFromURL/{url}")
