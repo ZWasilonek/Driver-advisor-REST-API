@@ -69,7 +69,7 @@ public class AdviceController {
 //        return null;
 //    }
 
-    @ApiOperation(value = "Adds a recommendation to the advice by its id", response = URL.class)
+    @ApiOperation(value = "Adds a recommendation to the advice by its id", response = AdviceDto.class)
     @PostMapping("/sentRecommendation/{id}")
     public AdviceDto sentRecommendation(@PathVariable("id") Long adviceId) {
         return adviceService.addRecommendationToAdvice(adviceId);

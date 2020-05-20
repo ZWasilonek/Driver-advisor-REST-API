@@ -33,8 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/swagger-ui.html",
                         "/webjars/**").permitAll()
-                .antMatchers("/admin/**").authenticated()
-                .and().formLogin().defaultSuccessUrl("/admin")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/training/sentRecommendation").hasAnyRole("ADMIN", "USER")
+                .anyRequest()
+                .authenticated()
+                .and().formLogin().permitAll()
                 .and().logout().logoutSuccessUrl("/")
         .and()
         .csrf().disable();
