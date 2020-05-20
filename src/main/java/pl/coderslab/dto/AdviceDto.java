@@ -35,9 +35,9 @@ public class AdviceDto {
     @JsonIgnore
     private LocalDate updated;
 
-    private Integer recommendation;
+    private Integer recommendations;
 
-    private Integer shared;
+    private Integer shares;
 
     @NotNull
     private User admin;

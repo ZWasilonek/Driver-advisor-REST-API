@@ -69,10 +69,16 @@ public class AdviceController {
 //        return null;
 //    }
 
-    @ApiOperation(value = "Adds a recommendation to the advice by its id", response = AdviceDto.class)
+    @ApiOperation(value = "Adds a recommendation to the advice number of recommendations by its id", response = AdviceDto.class)
     @PostMapping("/sentRecommendation/{id}")
-    public AdviceDto sentRecommendation(@PathVariable("id") Long adviceId) {
+    public AdviceDto sentRecommendation(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
         return adviceService.addRecommendationToAdvice(adviceId);
+    }
+
+    @ApiOperation(value = "Adds a share to the advice number of shares by its id", response = AdviceDto.class)
+    @PostMapping("/share/{id}")
+    public AdviceDto shareAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
+        return adviceService.addSharingToAdvice(adviceId);
     }
 
 }

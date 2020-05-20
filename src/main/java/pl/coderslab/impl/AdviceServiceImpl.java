@@ -18,9 +18,18 @@ public class AdviceServiceImpl extends GenericServiceImpl<AdviceDto,Advice, Advi
     @Override
     public AdviceDto addRecommendationToAdvice(Long adviceId) throws EntityNotFoundException {
         AdviceDto founded = this.findById(adviceId);
-        Integer recommendations = founded.getRecommendation();
+        Integer recommendations = founded.getRecommendations();
         if (recommendations == null) recommendations = 0;
-        founded.setRecommendation(recommendations + 1);
+        founded.setRecommendations(recommendations + 1);
+        return this.update(founded);
+    }
+
+    @Override
+    public AdviceDto addSharingToAdvice(Long adviceId) {
+        AdviceDto founded = this.findById(adviceId);
+        Integer numberOfShares = founded.getShares();
+        if (numberOfShares == null) numberOfShares = 0;
+        founded.setShares(numberOfShares + 1);
         return this.update(founded);
     }
 

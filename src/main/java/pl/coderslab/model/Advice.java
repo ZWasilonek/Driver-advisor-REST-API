@@ -31,8 +31,8 @@ public class Advice extends GenericEntityID {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updated;
 
-    private Integer recommendation;
-    private Integer shared;
+    private Integer recommendations;
+    private Integer shares;
 
     @ManyToOne
     private User admin;

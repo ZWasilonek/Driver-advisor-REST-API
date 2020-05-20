@@ -8,4 +8,6 @@ public interface AdviceService extends GenericService<AdviceDto, Advice> {
 
     AdviceDto addRecommendationToAdvice(Long adviceId);
 
+    AdviceDto addSharingToAdvice(Long adviceId);
+
 }
