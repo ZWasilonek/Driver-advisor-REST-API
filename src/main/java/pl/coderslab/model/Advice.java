@@ -37,7 +37,7 @@ public class Advice extends GenericEntityID {
     @ManyToOne
     private User admin;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Tag> tags;
 
     @Column(name = "file_id")

@@ -1,24 +1,31 @@
 package pl.coderslab.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.AdviceDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.service.AdviceService;
+import pl.coderslab.service.MultiTypeFileService;
+import pl.coderslab.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URL;
 
-@Controller
+@RestController
 public class AdviceController {
 
     private final AdviceService adviceService;
+    private final MultiTypeFileService multiTypeFileService;
+    private final UserService userService;
 
     @Autowired
-    public AdviceController(AdviceService adviceService) {
+    public AdviceController(AdviceService adviceService, MultiTypeFileService multiTypeFileService,UserService userService) {
         this.adviceService = adviceService;
+        this.multiTypeFileService = multiTypeFileService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
@@ -44,6 +51,28 @@ public class AdviceController {
     @GetMapping("/getURLtoFile")
     public URL getURLtoFileByAnswerId(HttpServletRequest request, Long answerId) throws EntityNotFoundException {
         return adviceService.getURLForFile(answerId, request);
+    }
+
+    @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
+    @GetMapping("/showFile/{id}")
+    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+        return multiTypeFileService.loadIntoBrowser(fileId);
+    }
+
+//    @ModelAttribute("userSession")
+//    public UserDto getUserFromSession() {
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            String username = ((UserDetails) principal).getUsername();
+//            return userService.findByUserName(username);
+//        }
+//        return null;
+//    }
+
+    @ApiOperation(value = "Adds a recommendation to the advice by its id", response = URL.class)
+    @PostMapping("/sentRecommendation/{id}")
+    public AdviceDto sentRecommendation(@PathVariable("id") Long adviceId) {
+        return adviceService.addRecommendationToAdvice(adviceId);
     }
 
 }

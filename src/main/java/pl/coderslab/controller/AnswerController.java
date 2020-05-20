@@ -2,10 +2,12 @@ package pl.coderslab.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.service.AnswerService;
+import pl.coderslab.service.MultiTypeFileService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -17,10 +19,12 @@ import java.util.Set;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final MultiTypeFileService multiTypeFileService;
 
     @Autowired
-    public AnswerController(AnswerService answerService) {
+    public AnswerController(AnswerService answerService, MultiTypeFileService multiTypeFileService) {
         this.answerService = answerService;
+        this.multiTypeFileService = multiTypeFileService;
     }
 
     @RequestMapping(path = "/create", method = RequestMethod.POST)
@@ -52,6 +56,12 @@ public class AnswerController {
     @GetMapping("/getURLtoFile")
     public URL getURLtoFileByAnswerId(HttpServletRequest request, Long answerId) {
         return answerService.getURLForFile(answerId, request);
+    }
+
+    @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
+    @GetMapping("/showFile/{id}")
+    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+        return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
 }
