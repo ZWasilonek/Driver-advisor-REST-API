@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.mail.MailException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -230,6 +231,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleMaxSizeException(MaxUploadSizeExceededException ex) {
         String error = "All files may have a maximum of 215MG";
         return buildResponseEntity(new ApiError(EXPECTATION_FAILED, error, ex));
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<Object> handleMailException(MailException ex) {
+        String error = "Failed to send email";
+        return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, error, ex));
     }
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {

@@ -2,11 +2,13 @@ package pl.coderslab.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.service.generic.GenericService;
 
+@Service
 public interface MultiTypeFileService extends GenericService<MultiTypeFileDto, MultiTypeFile> {
 
     MultiTypeFileDto findByFileName(String fileName);

@@ -11,5 +11,5 @@ public interface TrainingService extends GenericService<TrainingDto, Training> {
 
     TrainingDto createTraining(TrainingDto trainingDto);
     Set<AnswerDto> getCorrectAnswers(TrainingDto trainingDto);
-    TrainingDto sentUserTrainingSolutions(Long userId, TrainingDto solvedTraining);
+    TrainingDto sendUserTrainingSolutions(Long userId, TrainingDto solvedTraining);
 }

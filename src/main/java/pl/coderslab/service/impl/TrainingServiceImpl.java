@@ -1,4 +1,4 @@
-package pl.coderslab.impl;
+package pl.coderslab.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.dto.UserDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import pl.coderslab.impl.generic.GenericServiceImpl;
+import pl.coderslab.service.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.Training;
 import pl.coderslab.repository.TrainingRepository;
 import pl.coderslab.service.TrainingService;
@@ -42,7 +42,7 @@ public class TrainingServiceImpl extends GenericServiceImpl<TrainingDto, Trainin
     }
 
     @Override
-    public TrainingDto sentUserTrainingSolutions(Long userId, TrainingDto solvedTraining) throws EntityNotFoundException {
+    public TrainingDto sendUserTrainingSolutions(Long userId, TrainingDto solvedTraining) throws EntityNotFoundException {
         Integer score = getCorrectAnswers(solvedTraining).size();
         TrainingDto unchangedTraining = this.findById(solvedTraining.getId());
         UserDto foundedUser = userService.findById(userId);

@@ -8,15 +8,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import pl.coderslab.impl.MultiTypeFileServiceImpl;
 import org.springframework.core.io.Resource;
+import pl.coderslab.service.MultiTypeFileService;
 
 import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
 import static org.springframework.http.MediaType.*;
 
@@ -24,10 +23,10 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("/file")
 public class MultiTypeFileController {
 
-    private final MultiTypeFileServiceImpl multiTypeFileService;
+    private final MultiTypeFileService multiTypeFileService;
 
     @Autowired
-    public MultiTypeFileController(MultiTypeFileServiceImpl multiTypeFileService) {
+    public MultiTypeFileController(MultiTypeFileService multiTypeFileService) {
         this.multiTypeFileService = multiTypeFileService;
     }
 
@@ -102,16 +101,16 @@ public class MultiTypeFileController {
 //    }
 
     //Nie działa
-    @PostMapping("/createFromURL/{url}")
-    public void createFromURL(@PathVariable("url") String url) {
-        multiTypeFileService.saveFromURL(url);
-    }
-
-    //??
-    @GetMapping("/url/{id}")
-    public ResponseEntity<?> getURL(@PathVariable("id") Long fileId, HttpServletRequest request) throws MalformedURLException {
-//        return (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);;
-        return multiTypeFileService.uploadFromURL(fileId, new URL(request.getRequestURL().toString()));
-    }
+//    @PostMapping("/createFromURL/{url}")
+//    public void createFromURL(@PathVariable("url") String url) {
+//        multiTypeFileService.saveFromURL(url);
+//    }
+//
+//    //??
+//    @GetMapping("/url/{id}")
+//    public ResponseEntity<?> getURL(@PathVariable("id") Long fileId, HttpServletRequest request) throws MalformedURLException {
+////        return (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);;
+//        return multiTypeFileService.uploadFromURL(fileId, new URL(request.getRequestURL().toString()));
+//    }
 
 }

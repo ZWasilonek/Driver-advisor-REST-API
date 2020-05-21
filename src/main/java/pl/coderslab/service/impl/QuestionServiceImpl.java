@@ -1,8 +1,8 @@
-package pl.coderslab.impl;
+package pl.coderslab.service.impl;
 
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.QuestionDto;
-import pl.coderslab.impl.generic.GenericServiceImpl;
+import pl.coderslab.service.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.Question;
 import pl.coderslab.repository.QuestionRepository;
 import pl.coderslab.service.QuestionService;

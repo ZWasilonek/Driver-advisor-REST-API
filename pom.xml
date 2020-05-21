@@ -126,6 +126,11 @@
             <version>2.3.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -179,6 +184,5 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
 
 </project>

@@ -1,4 +1,4 @@
-package pl.coderslab.impl.generic;
+package pl.coderslab.service.impl.generic;
 
 import org.hibernate.service.spi.ServiceException;
 import org.modelmapper.ModelMapper;

@@ -59,7 +59,7 @@ public class TrainingController {
     @ApiOperation(value = "Assigns the training and score (number of correct answers) to the user found in session and return the same previously sent object TrainingDto", response = TrainingDto.class)
     @PostMapping("/solveTraining")
     public TrainingDto sendUserTrainingSolutions(@RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
-        return trainingService.sentUserTrainingSolutions(getUserFromSession().getId(), trainingDto);
+        return trainingService.sendUserTrainingSolutions(getUserFromSession().getId(), trainingDto);
     }
 
 }

@@ -1,12 +1,10 @@
 package pl.coderslab.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.UserDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import pl.coderslab.impl.UserServiceImpl;
-import pl.coderslab.model.User;
+import pl.coderslab.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,16 +30,9 @@ public class UserController {
         return userService.findById(userId);
     }
 
-    @PutMapping("/update/{id}")
-    public UserDto updateUser(@PathVariable(value = "id") Long userId,
-                             @Valid @RequestBody User userDetails) throws EntityNotFoundException {
-        UserDto foundedUser = userService.findById(userId);
-        if (foundedUser != null) {
-            foundedUser.setUsername(userDetails.getUsername());
-            foundedUser.setPassword(userDetails.getPassword());
-            return userService.saveUser(foundedUser);
-        }
-        throw new ResourceNotFoundException("User not found for this id: " + userId);
+    @PutMapping("/update")
+    public UserDto updateUser(@Valid @RequestBody UserDto userDetails) throws EntityNotFoundException {
+        return userService.update(userDetails);
     }
 
     @DeleteMapping("/delete/{id}")

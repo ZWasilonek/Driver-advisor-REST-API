@@ -2,61 +2,41 @@ package pl.coderslab.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.AdviceDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.service.AdviceService;
-import pl.coderslab.service.MultiTypeFileService;
-import pl.coderslab.service.UserService;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.net.URL;
 
 @RestController
+@RequestMapping("/advice")
 public class AdviceController {
 
     private final AdviceService adviceService;
-    private final MultiTypeFileService multiTypeFileService;
-    private final UserService userService;
 
     @Autowired
-    public AdviceController(AdviceService adviceService, MultiTypeFileService multiTypeFileService,UserService userService) {
+    public AdviceController(AdviceService adviceService) {
         this.adviceService = adviceService;
-        this.multiTypeFileService = multiTypeFileService;
-        this.userService = userService;
     }
 
     @PostMapping("/create")
     public AdviceDto createAdvice(@Valid @RequestBody AdviceDto adviceDto) {
-        return adviceService.create(adviceDto);
+        return adviceService.createAdvice(adviceDto);
     }
 
     @GetMapping("find/{id}")
     public AdviceDto findAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
-        return adviceService.findById(adviceId);
+        return adviceService.findAdviceById(adviceId);
     }
 
     @PutMapping("/update")
     public AdviceDto updateAdvice(@Valid @RequestBody AdviceDto adviceDto) throws EntityNotFoundException {
-        return adviceService.update(adviceDto);
+        return adviceService.updateAdvice(adviceDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public void removeAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
-        adviceService.removeById(adviceId);
-    }
-
-    @GetMapping("/getURLtoFile")
-    public URL getURLtoFileByAnswerId(HttpServletRequest request, Long answerId) throws EntityNotFoundException {
-        return adviceService.getURLForFile(answerId, request);
-    }
-
-    @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
-    @GetMapping("/showFile/{id}")
-    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
-        return multiTypeFileService.loadIntoBrowser(fileId);
+        adviceService.removeAdviceById(adviceId);
     }
 
 //    @ModelAttribute("userSession")
@@ -70,8 +50,8 @@ public class AdviceController {
 //    }
 
     @ApiOperation(value = "Adds a recommendation to the advice number of recommendations by its id", response = AdviceDto.class)
-    @PostMapping("/sentRecommendation/{id}")
-    public AdviceDto sentRecommendation(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
+    @PostMapping("/sendRecommendation/{id}")
+    public AdviceDto sendRecommendation(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
         return adviceService.addRecommendationToAdvice(adviceId);
     }
 

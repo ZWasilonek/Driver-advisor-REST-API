@@ -1,9 +1,9 @@
-package pl.coderslab.impl;
+package pl.coderslab.service.impl;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.UserDto;
-import pl.coderslab.impl.generic.GenericServiceImpl;
+import pl.coderslab.service.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.User;
 import pl.coderslab.model.Role;
 import pl.coderslab.repository.RoleRepository;

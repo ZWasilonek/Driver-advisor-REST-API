@@ -1,16 +1,14 @@
-package pl.coderslab.impl;
+package pl.coderslab.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import pl.coderslab.impl.generic.GenericServiceImpl;
+import pl.coderslab.service.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.Answer;
 import pl.coderslab.repository.AnswerRepository;
 import pl.coderslab.service.AnswerService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.URL;
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -22,6 +23,11 @@ public class User extends GenericEntityID {
     @NotNull
     @NotBlank
     private String password;
+
+    @Email
+    @NotNull
+    @NotBlank
+    private String email;
 
     private int enabled;
 

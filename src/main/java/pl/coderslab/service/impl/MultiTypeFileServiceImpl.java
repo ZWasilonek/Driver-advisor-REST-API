@@ -1,4 +1,4 @@
-package pl.coderslab.impl;
+package pl.coderslab.service.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.StringUtils;
@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.errorhandler.exception.FileStorageException;
-import pl.coderslab.impl.generic.GenericServiceImpl;
+import pl.coderslab.service.impl.generic.GenericServiceImpl;
 import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.repository.MultiTypeFileRepository;
 import pl.coderslab.service.MultiTypeFileService;

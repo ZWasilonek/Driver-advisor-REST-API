@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import pl.coderslab.model.Role;
-import pl.coderslab.model.Training;
 
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -17,7 +17,6 @@ import java.util.Set;
 public class UserDto {
 
     @Id
-    @JsonIgnore
     private Long id;
 
     @NotNull
@@ -27,6 +26,11 @@ public class UserDto {
     @NotNull
     @NotBlank
     private String password;
+
+    @Email
+    @NotNull
+    @NotBlank
+    private String email;
 
     @JsonIgnore
     private int enabled;
