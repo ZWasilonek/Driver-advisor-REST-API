@@ -1,4 +1,4 @@
-package pl.coderslab.service.impl;
+package pl.coderslab.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.coderslab.dto.UserDto;
 import pl.coderslab.model.Role;
-import pl.coderslab.service.UserService;
 
 import java.util.HashSet;
 import java.util.Set;

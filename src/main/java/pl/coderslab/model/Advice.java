@@ -1,7 +1,7 @@
 package pl.coderslab.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.coderslab.model.generic.GenericEntityID;
 
@@ -14,7 +14,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Getter
 public class Advice extends GenericEntityID {
 
     @NotNull
@@ -46,6 +46,10 @@ public class Advice extends GenericEntityID {
     @OneToOne
     private Training training;
 
+    public Advice() {
+        this.tags = new HashSet<>();
+    }
+
     @PrePersist
     public void setCreated() {
         this.created = LocalDate.now();
@@ -56,8 +60,35 @@ public class Advice extends GenericEntityID {
         this.updated = LocalDate.now();
     }
 
-    public Advice() {
-        this.tags = new HashSet<>();
+    public void setTitle(String title) {
+        this.title = title;
     }
 
+    public void setGuide(String guide) {
+        this.guide = guide;
+    }
+
+    public void setRecommendations(Integer recommendations) {
+        this.recommendations = recommendations;
+    }
+
+    public void setShares(Integer shares) {
+        this.shares = shares;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
+    }
+
+    public void setTraining(Training training) {
+        this.training = training;
+    }
 }

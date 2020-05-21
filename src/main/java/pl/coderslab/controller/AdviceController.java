@@ -20,8 +20,9 @@ public class AdviceController {
     }
 
     @PostMapping("/create")
-    public AdviceDto createAdvice(@Valid @RequestBody AdviceDto adviceDto) {
-        return adviceService.createAdvice(adviceDto);
+    public AdviceDto createAdvice(@Valid @RequestBody AdviceDto adviceDto,
+                                  @RequestParam(required = false) Long fileId) {
+        return adviceService.createAdvice(adviceDto, fileId);
     }
 
     @GetMapping("find/{id}")
@@ -30,8 +31,9 @@ public class AdviceController {
     }
 
     @PutMapping("/update")
-    public AdviceDto updateAdvice(@Valid @RequestBody AdviceDto adviceDto) throws EntityNotFoundException {
-        return adviceService.updateAdvice(adviceDto);
+    public AdviceDto updateAdvice(@Valid @RequestBody AdviceDto adviceDto,
+                                  @RequestParam(required = false) Long fileId) throws EntityNotFoundException {
+        return adviceService.updateAdvice(adviceDto, fileId);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -42,8 +42,6 @@ public class AdviceDto {
 
     private URL adviceFileURL;
 
-    private Long fileId;
-
     @NotNull
     private User admin;
 

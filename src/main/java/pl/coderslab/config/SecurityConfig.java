@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.coderslab.service.impl.SpringDataUserDetailsService;
+import pl.coderslab.service.SpringDataUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -33,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",
                         "/swagger-ui.html",
                         "/webjars/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/training/sentRecommendation").hasAnyRole("ADMIN", "USER")
-                .anyRequest()
-                .authenticated()
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/training/sentRecommendation").hasAnyRole("ADMIN", "USER")
+//                .anyRequest()
+//                .authenticated()
                 .and().formLogin().permitAll()
                 .and().logout().logoutSuccessUrl("/")
         .and()
