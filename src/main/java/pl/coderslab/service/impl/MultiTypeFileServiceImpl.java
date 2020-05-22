@@ -1,11 +1,8 @@
 package pl.coderslab.service.impl;
 
-import org.apache.commons.io.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +16,7 @@ import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.repository.MultiTypeFileRepository;
 import pl.coderslab.service.MultiTypeFileService;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -33,8 +28,8 @@ import static org.springframework.http.ResponseEntity.ok;
 @Service
 public class MultiTypeFileServiceImpl implements MultiTypeFileService {
 
-    private final String UPLOADED_FOLDER = "/home/zofia/Pulpit/Coderlabs/PortfolioLab/Driver_REST_API/Driving_Advisor/Driving-advisor/src/main/webapp/resources/img/";
-    private final Path fileStorageLocation = Paths.get(UPLOADED_FOLDER).toAbsolutePath().normalize();
+    private static final String UPLOADED_FOLDER = "src/main/webapp/resources/img/";
+    private static final Path fileStorageLocation = Paths.get(UPLOADED_FOLDER).toAbsolutePath().normalize();
 
     private final MultiTypeFileRepository fileRepository;
 
@@ -110,66 +105,16 @@ public class MultiTypeFileServiceImpl implements MultiTypeFileService {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // DO ściągania z url - nie działa
-    public Resource loadFileAsResource(String fileName) throws Exception {
-        try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return resource;
-            } else {
-                throw new FileNotFoundException("File not found " + fileName);
-            }
-        } catch (MalformedURLException ex) {
-            throw new FileNotFoundException("File not found " + fileName);
+    @Override
+    public ResponseEntity<?> downloadFileById(Long fileId) throws EntityNotFoundException {
+        MultiTypeFileDto foundedFile = convertToObjectDTO(getFileById(fileId));
+        if (foundedFile != null) {
+            byte[] imageByte = foundedFile.getData();
+            return ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(imageByte);
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    //do naprawy
-    public void saveFromURL(String url) {
-//        try {
-//            URL fileURL = new URL(url);
-//            try (InputStream in = fileURL.openStream()) {
-//                Files.copy(in, fileStorageLocation, StandardCopyOption.REPLACE_EXISTING);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-
-        try {
-            URL fileURL = new URL(url);
-            File file = new File(fileStorageLocation.toString());
-            FileUtils.copyURLToFile(fileURL, file);
-        } catch (IOException e) {
-            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //Do naprawy
-//    public ResponseEntity<?> uploadFromURL(Long fileId, URL url) throws EntityNotFoundException {
-//        MultiTypeFileDto foundedFile = findById(fileId);
-//        if (foundedFile != null) {
-//            byte[] imageByte = foundedFile.getData();
-//            return ok().contentType(MediaType.valueOf(foundedFile.getFileType()))
-//                    .body(imageByte);
-//        }
-//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-//    @Override
-//    public Resource loadFileAsResource(Long fileId) {
-//        MultiTypeFileDto fileDto = this.findById(fileId);
-//        Resource resource = null;
-//        try {
-//            Path filePath = this.fileStorageLocation.resolve(fileDto.getFileName()).normalize();
-//            resource = new UrlResource(filePath.toUri());
-//        } catch (MalformedURLException e) {
-//            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        return resource;
-//    }
 
     @Override
     public MultiTypeFileDto convertToObjectDTO(MultiTypeFile file) {
@@ -198,9 +143,8 @@ public class MultiTypeFileServiceImpl implements MultiTypeFileService {
         return fileURL;
     }
 
-    private void saveFileIntoDir(MultipartFile file) {
-        String UPLOADED_FOLDER = "/home/zofia/Pulpit/Coderlabs/PortfolioLab/Driver_REST_API/Driving_Advisor/Driving-advisor/src/main/webapp/resources/img/";
-        Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+    private static void saveFileIntoDir(MultipartFile file) {
+        Path path = Paths.get(fileStorageLocation + file.getOriginalFilename());
         try {
             file.transferTo(path);
         } catch (IOException e) {

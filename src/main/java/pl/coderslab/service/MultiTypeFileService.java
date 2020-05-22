@@ -13,8 +13,7 @@ public interface MultiTypeFileService {
     boolean removeFileById(Long fileId);
 
     ResponseEntity<?> loadIntoBrowser(Long fileId);
-//
-//    Resource loadFileAsResource(Long fileId);
+    ResponseEntity<?> downloadFileById(Long fileId);
 
     MultiTypeFileDto convertToObjectDTO(MultiTypeFile multiTypeFile);
     MultiTypeFile convertToEntity(MultiTypeFileDto multiTypeFileDto);

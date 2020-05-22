@@ -5,16 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import org.springframework.core.io.Resource;
 import pl.coderslab.service.MultiTypeFileService;
 
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.springframework.http.MediaType.*;
@@ -52,54 +46,17 @@ public class MultiTypeFileController {
         return multiTypeFileService.removeFileById(imageId);
     }
 
-
-
     @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
-    @GetMapping("/showFile/{id}")
-    public ResponseEntity<?> displayById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+    @GetMapping("/showFile/{fileName}/{id}")
+    public ResponseEntity<?> displayById(@PathVariable("fileName") String fileName,
+                                         @PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
-//    @ApiOperation(value = "Download a file by file id", response = URL.class)
-//    @GetMapping("/downloadFile/{id}")
-//    public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId,
-//                                          HttpServletRequest request) {
-//        Resource resource = multiTypeFileService.loadFileAsResource(fileId);
-//        String contentType;
-//        try {
-//            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-//        } catch (IOException ex) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        if(contentType == null) {
-//            contentType = "application/octet-stream";
-//        }
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(contentType))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-//                .body(resource);
-//    }
-
-    //NIE WCZYTUJE PLIKÓW - jak naprawisz to zamień z
-    //    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
-//    @ApiOperation(value = "Upload files and receive list of urls for view", response = URL.class)
-//    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST, consumes = {"multipart/form-data"})
-//    public Set<URL> uploadFile(@RequestParam("files") MultipartFile[] files) {
-//        return multiTypeFileService.uploadFiles(files);
-//    }
-
-    //Nie działa
-//    @PostMapping("/createFromURL/{url}")
-//    public void createFromURL(@PathVariable("url") String url) {
-//        multiTypeFileService.saveFromURL(url);
-//    }
-//
-//    //??
-//    @GetMapping("/url/{id}")
-//    public ResponseEntity<?> getURL(@PathVariable("id") Long fileId, HttpServletRequest request) throws MalformedURLException {
-////        return (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);;
-//        return multiTypeFileService.uploadFromURL(fileId, new URL(request.getRequestURL().toString()));
-//    }
+    @ApiOperation(value = "Download a file from database by file id", response = URL.class)
+    @GetMapping("/downloadFile/{id}")
+    public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId) throws EntityNotFoundException {
+        return multiTypeFileService.downloadFileById(fileId);
+    }
 
 }
