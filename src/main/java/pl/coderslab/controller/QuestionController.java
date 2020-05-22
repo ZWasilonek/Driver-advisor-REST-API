@@ -28,22 +28,22 @@ public class QuestionController {
 
     @PostMapping("/create")
     public QuestionDto createQuestion(@Valid @RequestBody QuestionDto questionDto) {
-        return questionService.create(questionDto);
+        return questionService.createQuestion(questionDto);
     }
 
     @GetMapping("/find/{id}")
     public QuestionDto findQuestionById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
-        return questionService.findById(questionId);
+        return questionService.findQuestionById(questionId);
     }
 
     @PutMapping("/update")
-    public QuestionDto updateQuestionById(@RequestBody QuestionDto questionDto) throws EntityNotFoundException {
-        return questionService.update(questionDto);
+    public QuestionDto updateQuestion(@Valid @RequestBody QuestionDto questionDto) throws EntityNotFoundException {
+        return questionService.updateQuestion(questionDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public void removeQuestionById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
-        questionService.removeById(questionId);
+        questionService.removeQuestionById(questionId);
     }
 
     @ApiOperation(value = "View a set of correct answers by question id", response = Set.class)

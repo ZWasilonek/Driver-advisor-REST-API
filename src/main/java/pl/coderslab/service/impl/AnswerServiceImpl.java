@@ -16,8 +16,6 @@ import pl.coderslab.service.AnswerService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -33,9 +31,8 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public AnswerDto createAnswer(AnswerDto answerDto, Long fileId) throws EntityNotFoundException {
-        if (fileId != null) findFileIdInDB(fileId);
         Answer answer = convertToEntity(answerDto);
-        if (fileId != null) answer.setFileId(fileId);
+        setExistingFileIdToAnswer(fileId, answer);
         answerRepository.save(answer);
         return convertToObjectDTO(answer);
     }
@@ -50,19 +47,16 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public AnswerDto updateAnswer(AnswerDto answerDto, Long fileId) throws EntityNotFoundException {
         checkIfAnswerExistsOrThrowException(answerDto.getId());
-        if (fileId != null) findFileIdInDB(fileId);
-        AnswerDto saved = null;
-//        if ( != null) {
-//            answerDto.setId(founded.getId());
-//            saved = convertToObjectDTO(answerRepository.save(convertToEntity(answerDto)));
-//        }
-        return saved;
+        Answer toUpdate = convertToEntity(answerDto);
+        setExistingFileIdToAnswer(fileId, toUpdate);
+        return convertToObjectDTO(answerRepository.save(toUpdate));
     }
 
     @Override
     public void removeAnswerById(Long answerId) throws EntityNotFoundException {
         checkIfAnswerExistsOrThrowException(answerId);
         answerRepository.deleteById(answerId);
+        answerRepository.removeAnswerFromQuestion(answerId);
     }
 
     @Override
@@ -76,14 +70,14 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Answer convertToEntity(AnswerDto answerDto) {
-        return new ModelMapper().map(answerDto, Answer.class);
-    }
-
-    @Override
-    public Set<AnswerDto> getCorrectAnswersByQuestionId(Long questionId) throws EntityNotFoundException {
-        return answerRepository.findCorrectAnswersByQuestionId(questionId).stream()
-                .map(entity -> convertToObjectDTO(entity))
-                .collect(Collectors.toSet());
+        Answer answer = new ModelMapper().map(answerDto, Answer.class);
+        URL answerFileURL = answerDto.getAnswerFileURL();
+        if (answerFileURL != null) {
+            String fileURL = answerFileURL.toString();
+            String fileId = fileURL.substring(fileURL.lastIndexOf("/") + 1);
+            answer.setFileId(Long.parseLong(fileId));
+        }
+        return answer;
     }
 
     private URL getURLtoFile(Long fileId) {
@@ -99,11 +93,19 @@ public class AnswerServiceImpl implements AnswerService {
         return fileURL;
     }
 
-    private void findFileIdInDB(Long fileId) {
+    private void setExistingFileIdToAnswer(Long fileId, Answer answer) {
         if (fileId != null) {
+            Long finalFileId = fileId;
             multiTypeFileRepository.findById(fileId).orElseThrow(
-                    () -> new EntityNotFoundException(MultiTypeFile.class, "file id for answer", fileId.toString()));
+                    () -> new EntityNotFoundException(MultiTypeFile.class, "file id for answer", finalFileId.toString()));
+        } else {
+            if (answer.getId() != null) {
+                Answer founded = answerRepository.findById(answer.getId()).orElseThrow(
+                        () -> new EntityNotFoundException(Answer.class, "id", answer.getId().toString()));
+                fileId = founded.getFileId();
+            }
         }
+        answer.setFileId(fileId);
     }
 
     private void checkIfAnswerExistsOrThrowException(Long answerId) throws EntityNotFoundException {

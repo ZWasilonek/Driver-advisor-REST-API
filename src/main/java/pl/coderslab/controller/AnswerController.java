@@ -33,7 +33,7 @@ public class AnswerController {
     }
 
     @PutMapping("/update")
-    public AnswerDto update(@Valid @RequestBody AnswerDto answerDto,
+    public AnswerDto updateAnswer(@Valid @RequestBody AnswerDto answerDto,
                             @RequestParam(required = false) Long fileId) throws EntityNotFoundException {
         return answerService.updateAnswer(answerDto, fileId);
     }

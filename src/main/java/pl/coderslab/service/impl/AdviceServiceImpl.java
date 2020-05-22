@@ -47,8 +47,7 @@ public class AdviceServiceImpl implements AdviceService {
     //create => null
     @Override
     public AdviceDto updateAdvice(AdviceDto adviceDto, Long fileId) throws EntityNotFoundException {
-        adviceRepository.findById(adviceDto.getId()).orElseThrow(
-                () -> new EntityNotFoundException(Advice.class, "id", adviceDto.getId().toString()));
+        checkIfAdviceExistsOrThrowException(adviceDto.getId());
         Advice toUpdate = convertToEntity(adviceDto);
         setExistingFileIdToAdvice(fileId, toUpdate);
         return convertToObjectDTO(adviceRepository.save(toUpdate));
@@ -56,8 +55,7 @@ public class AdviceServiceImpl implements AdviceService {
 
     @Override
     public void removeAdviceById(Long adviceId) throws EntityNotFoundException {
-        adviceRepository.findById(adviceId).orElseThrow(() ->
-                new EntityNotFoundException(Advice.class, "id", adviceId.toString()));
+        checkIfAdviceExistsOrThrowException(adviceId);
         adviceRepository.deleteById(adviceId);
     }
 
