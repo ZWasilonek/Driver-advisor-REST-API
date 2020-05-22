@@ -1,24 +1,22 @@
 package pl.coderslab.service;
 
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.dto.MultiTypeFileDto;
 import pl.coderslab.model.MultiTypeFile;
-import pl.coderslab.service.generic.GenericService;
 
-@Service
-public interface MultiTypeFileService extends GenericService<MultiTypeFileDto, MultiTypeFile> {
+public interface MultiTypeFileService {
 
-    MultiTypeFileDto findByFileName(String fileName);
-
-    MultiTypeFileDto saveFile(MultipartFile file);
-
+    MultiTypeFileDto createFile(MultipartFile file);
+    MultiTypeFileDto findByFileId(Long fileId);
     MultiTypeFileDto updateFile(MultipartFile file, Long imageId);
+    boolean removeFileById(Long fileId);
 
     ResponseEntity<?> loadIntoBrowser(Long fileId);
+//
+//    Resource loadFileAsResource(Long fileId);
 
-    Resource loadFileAsResource(Long fileId);
+    MultiTypeFileDto convertToObjectDTO(MultiTypeFile multiTypeFile);
+    MultiTypeFile convertToEntity(MultiTypeFileDto multiTypeFileDto);
 
 }

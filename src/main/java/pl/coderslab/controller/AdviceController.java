@@ -37,8 +37,8 @@ public class AdviceController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
-        adviceService.removeAdviceById(adviceId);
+    public boolean removeAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
+        return adviceService.removeAdviceById(adviceId);
     }
 
 //    @ModelAttribute("userSession")

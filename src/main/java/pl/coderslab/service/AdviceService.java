@@ -8,7 +8,7 @@ public interface AdviceService {
     AdviceDto createAdvice(AdviceDto adviceDto, Long fileId);
     AdviceDto findAdviceById(Long adviceId);
     AdviceDto updateAdvice(AdviceDto adviceDto, Long fileId);
-    void removeAdviceById(Long adviceId);
+    boolean removeAdviceById(Long adviceId);
 
     AdviceDto addRecommendationToAdvice(Long adviceId);
     AdviceDto addSharingToAdvice(Long adviceId);

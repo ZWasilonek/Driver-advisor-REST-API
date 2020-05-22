@@ -2,31 +2,28 @@ package pl.coderslab.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.AnswerDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.model.Answer;
-import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.repository.AnswerRepository;
-import pl.coderslab.repository.MultiTypeFileRepository;
 import pl.coderslab.service.AnswerService;
+import pl.coderslab.service.MultiTypeFileService;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
     private final AnswerRepository answerRepository;
-    private final MultiTypeFileRepository multiTypeFileRepository;
+    private final MultiTypeFileService fileService;
 
     @Autowired
-    public AnswerServiceImpl(AnswerRepository answerRepository, MultiTypeFileRepository multiTypeFileRepository) {
+    public AnswerServiceImpl(AnswerRepository answerRepository, MultiTypeFileService fileService) {
         this.answerRepository = answerRepository;
-        this.multiTypeFileRepository = multiTypeFileRepository;
+        this.fileService = fileService;
     }
 
     @Override
@@ -53,17 +50,22 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void removeAnswerById(Long answerId) throws EntityNotFoundException {
-        checkIfAnswerExistsOrThrowException(answerId);
-        answerRepository.deleteById(answerId);
-        answerRepository.removeAnswerFromQuestion(answerId);
+    public boolean removeAnswerById(Long answerId) throws EntityNotFoundException {
+        Answer founded = answerRepository.findById(answerId).orElseThrow(
+                () -> new EntityNotFoundException(Answer.class, "id", answerId.toString()));
+        if (founded != null) {
+            answerRepository.delete(founded);
+            answerRepository.removeAnswerFromQuestion(answerId);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public AnswerDto convertToObjectDTO(Answer entity) {
         AnswerDto answerDto = new ModelMapper().map(entity, AnswerDto.class);
         if (entity.getFileId() != null) {
-            answerDto.setAnswerFileURL(getURLtoFile(entity.getFileId()));
+            answerDto.setAnswerFileURL(fileService.findByFileId(entity.getFileId()).getUploadDir());
         }
         return answerDto;
     }
@@ -80,24 +82,16 @@ public class AnswerServiceImpl implements AnswerService {
         return answer;
     }
 
-    private URL getURLtoFile(Long fileId) {
-        URL fileURL = null;
-        try {
-            fileURL = new URL(ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/file/showFile/")
-                    .path(fileId.toString())
-                    .toUriString());
-        } catch (MalformedURLException e) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return fileURL;
+    @Override
+    public Set<AnswerDto> getCorrectAnswersByQuestionId(Long questionId) throws EntityNotFoundException {
+        return answerRepository.findCorrectAnswersByQuestionId(questionId).stream()
+                .map(entity -> convertToObjectDTO(entity))
+                .collect(Collectors.toSet());
     }
 
     private void setExistingFileIdToAnswer(Long fileId, Answer answer) {
         if (fileId != null) {
-            Long finalFileId = fileId;
-            multiTypeFileRepository.findById(fileId).orElseThrow(
-                    () -> new EntityNotFoundException(MultiTypeFile.class, "file id for answer", finalFileId.toString()));
+            fileService.findByFileId(fileId);
         } else {
             if (answer.getId() != null) {
                 Answer founded = answerRepository.findById(answer.getId()).orElseThrow(

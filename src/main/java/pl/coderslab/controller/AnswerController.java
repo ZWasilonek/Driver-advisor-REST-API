@@ -1,6 +1,5 @@
 package pl.coderslab.controller;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.AnswerDto;
@@ -8,7 +7,6 @@ import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.service.AnswerService;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/answer")
@@ -39,14 +37,8 @@ public class AnswerController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeAnswerById(@PathVariable("id") Long answerId) throws EntityNotFoundException {
-        answerService.removeAnswerById(answerId);
-    }
-
-    @ApiOperation(value = "View a set of correct answers by question id", response = Set.class)
-    @GetMapping("/findCorrect/{id}")
-    public Set<AnswerDto> findCorrectAnswersByQuestionId(@PathVariable("id") Long questionId) throws EntityNotFoundException {
-        return answerService.getCorrectAnswersByQuestionId(questionId);
+    public boolean removeAnswerById(@PathVariable("id") Long answerId) throws EntityNotFoundException {
+        return answerService.removeAnswerById(answerId);
     }
 
 }

@@ -30,40 +30,29 @@ public class MultiTypeFileController {
         this.multiTypeFileService = multiTypeFileService;
     }
 
-    @RequestMapping(path = "/upload", method = RequestMethod.POST)
-    public MultiTypeFileDto uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws MalformedURLException {
-        MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
-        fileDto.setUploadDir(new URL(ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileDto.getFileName())
-                .toUriString()));
-        return fileDto;
+    @ApiOperation(value = "Upload a file and receive URL for view", response = URL.class)
+    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
+    public MultiTypeFileDto uploadFileFromURL(@RequestParam("file") MultipartFile file) {
+        return multiTypeFileService.createFile(file);
     }
 
     @GetMapping("/find/{id}")
     public MultiTypeFileDto findFileById(@PathVariable("id") Long fileId) throws EntityNotFoundException {
-        return multiTypeFileService.findById(fileId);
+        return multiTypeFileService.findByFileId(fileId);
     }
 
     @PostMapping(path = "/update/{id}", consumes = MULTIPART_FORM_DATA_VALUE)
     public MultiTypeFileDto updateFileById(@RequestPart("file") MultipartFile file,
                                            @PathVariable("id") Long fileId) {
-        MultiTypeFileDto foundedImg = multiTypeFileService.findById(fileId);
-        multiTypeFileService.updateFile(file, fileId);
-        return foundedImg;
+        return multiTypeFileService.updateFile(file, fileId);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteFileById(@PathVariable("id") Long imageId) throws EntityNotFoundException {
-        multiTypeFileService.findById(imageId);
+    public boolean deleteFileById(@PathVariable("id") Long imageId) throws EntityNotFoundException {
+        return multiTypeFileService.removeFileById(imageId);
     }
 
-    @ApiOperation(value = "Upload a file and receive url for view", response = URL.class)
-    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)
-    public URL uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
-        MultiTypeFileDto fileDto = multiTypeFileService.saveFile(file);
-        return multiTypeFileService.getURLForFile(fileDto.getId(), request);
-    }
+
 
     @ApiOperation(value = "Display a file by file id from URL in browser", response = URL.class)
     @GetMapping("/showFile/{id}")
@@ -71,26 +60,26 @@ public class MultiTypeFileController {
         return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
-    @ApiOperation(value = "Download a file by file id", response = URL.class)
-    @GetMapping("/downloadFile/{id}")
-    public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId,
-                                          HttpServletRequest request) {
-        Resource resource = multiTypeFileService.loadFileAsResource(fileId);
-        String contentType;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        if(contentType == null) {
-            contentType = "application/octet-stream";
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
+//    @ApiOperation(value = "Download a file by file id", response = URL.class)
+//    @GetMapping("/downloadFile/{id}")
+//    public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId,
+//                                          HttpServletRequest request) {
+//        Resource resource = multiTypeFileService.loadFileAsResource(fileId);
+//        String contentType;
+//        try {
+//            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+//        } catch (IOException ex) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        if(contentType == null) {
+//            contentType = "application/octet-stream";
+//        }
+//
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(contentType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//                .body(resource);
+//    }
 
     //NIE WCZYTUJE PLIKÓW - jak naprawisz to zamień z
     //    @RequestMapping(path = "/uploadFile", method = RequestMethod.POST)

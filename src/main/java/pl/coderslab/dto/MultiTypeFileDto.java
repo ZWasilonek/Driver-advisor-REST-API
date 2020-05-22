@@ -14,7 +14,6 @@ import java.net.URL;
 public class MultiTypeFileDto {
 
     @Id
-    @JsonIgnore
     private Long id;
 
     @NotNull

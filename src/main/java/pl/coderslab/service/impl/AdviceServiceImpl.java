@@ -2,31 +2,24 @@ package pl.coderslab.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.coderslab.dto.AdviceDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.model.Advice;
-import pl.coderslab.model.MultiTypeFile;
 import pl.coderslab.repository.AdviceRepository;
-import pl.coderslab.repository.MultiTypeFileRepository;
 import pl.coderslab.service.AdviceService;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import pl.coderslab.service.MultiTypeFileService;
 
 @Service
 public class AdviceServiceImpl implements AdviceService {
 
     private final AdviceRepository adviceRepository;
-    private final MultiTypeFileRepository multiTypeFileRepository;
+    private final MultiTypeFileService fileService;
 
     @Autowired
-    public AdviceServiceImpl(AdviceRepository adviceRepository, MultiTypeFileRepository multiTypeFileRepository) {
+    public AdviceServiceImpl(AdviceRepository adviceRepository, MultiTypeFileService fileService) {
         this.adviceRepository = adviceRepository;
-        this.multiTypeFileRepository = multiTypeFileRepository;
+        this.fileService = fileService;
     }
 
     @Override
@@ -54,9 +47,14 @@ public class AdviceServiceImpl implements AdviceService {
     }
 
     @Override
-    public void removeAdviceById(Long adviceId) throws EntityNotFoundException {
-        checkIfAdviceExistsOrThrowException(adviceId);
-        adviceRepository.deleteById(adviceId);
+    public boolean removeAdviceById(Long adviceId) throws EntityNotFoundException {
+        Advice founded = adviceRepository.findById(adviceId).orElseThrow(
+                () -> new EntityNotFoundException(Advice.class, "id", adviceId.toString()));
+        if (founded != null) {
+            adviceRepository.delete(founded);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -83,7 +81,7 @@ public class AdviceServiceImpl implements AdviceService {
     public AdviceDto convertToObjectDTO(Advice entity) {
         AdviceDto adviceDto = new ModelMapper().map(entity, AdviceDto.class);
         if (entity.getFileId() != null) {
-            adviceDto.setAdviceFileURL(getURLtoFile(entity.getFileId()));
+            adviceDto.setAdviceFileURL(fileService.findByFileId(entity.getFileId()).getUploadDir());
         }
         return adviceDto;
     }
@@ -93,26 +91,9 @@ public class AdviceServiceImpl implements AdviceService {
         return new ModelMapper().map(dto, Advice.class);
     }
 
-    private URL getURLtoFile(Long fileId) {
-        multiTypeFileRepository.findById(fileId).orElseThrow(
-                () -> new EntityNotFoundException(MultiTypeFile.class, "id", fileId.toString()));
-        URL fileURL = null;
-        try {
-            fileURL = new URL(ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/file/showFile/")
-                    .path(fileId.toString())
-                    .toUriString());
-        } catch (MalformedURLException e) {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return fileURL;
-    }
-
     private void setExistingFileIdToAdvice(Long fileId, Advice advice) throws EntityNotFoundException {
         if (fileId != null) {
-            Long finalFileId = fileId;
-            multiTypeFileRepository.findById(fileId).orElseThrow(
-                    () -> new EntityNotFoundException(MultiTypeFile.class, "file id for advice", finalFileId.toString()));
+            fileService.findByFileId(fileId);
         } else {
             if (advice.getId() != null) {
                 Advice founded = adviceRepository.findById(advice.getId()).orElseThrow(
