@@ -33,17 +33,17 @@ public class TrainingController {
 
     @GetMapping("/find/{id}")
     public TrainingDto findTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
-        return trainingService.findById(trainingId);
+        return trainingService.findByTrainingId(trainingId);
     }
 
     @PutMapping("/update")
     public TrainingDto updateTraining(@RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
-        return trainingService.update(trainingDto);
+        return trainingService.updateTraining(trainingDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public void removeTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
-        trainingService.removeById(trainingId);
+        trainingService.removeTrainingById(trainingId);
     }
 
     @ModelAttribute("userSession")
