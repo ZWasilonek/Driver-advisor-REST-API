@@ -37,13 +37,13 @@ public class TrainingController {
     }
 
     @PutMapping("/update")
-    public TrainingDto updateTraining(@RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
+    public TrainingDto updateTraining(@Valid @RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
         return trainingService.updateTraining(trainingDto);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void removeTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
-        trainingService.removeTrainingById(trainingId);
+    public boolean removeTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
+        return trainingService.removeTrainingById(trainingId);
     }
 
     @ModelAttribute("userSession")
@@ -58,7 +58,7 @@ public class TrainingController {
 
     @ApiOperation(value = "Assigns the training and score (number of correct answers) to the user found in session and return the same previously sent object TrainingDto", response = TrainingDto.class)
     @PostMapping("/solveTraining")
-    public TrainingDto sendUserTrainingSolutions(@RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
+    public TrainingDto sendUserTrainingSolutions(@Valid @RequestBody TrainingDto trainingDto) throws EntityNotFoundException {
         return trainingService.sendUserTrainingSolutions(getUserFromSession().getId(), trainingDto);
     }
 

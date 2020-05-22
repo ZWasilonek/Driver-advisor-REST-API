@@ -4,26 +4,33 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.AnswerDto;
+import pl.coderslab.dto.QuestionDto;
 import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.dto.UserDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
+import pl.coderslab.model.Question;
 import pl.coderslab.model.Training;
 import pl.coderslab.repository.TrainingRepository;
+import pl.coderslab.service.AnswerService;
+import pl.coderslab.service.QuestionService;
 import pl.coderslab.service.TrainingService;
 import pl.coderslab.service.UserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainingServiceImpl implements TrainingService {
 
     private final TrainingRepository trainingRepository;
     private final UserService userService;
+    private final QuestionService questionService;
 
     @Autowired
-    public TrainingServiceImpl(TrainingRepository trainingRepository, UserService userService) {
+    public TrainingServiceImpl(TrainingRepository trainingRepository, UserService userService, QuestionService questionService) {
         this.trainingRepository = trainingRepository;
         this.userService = userService;
+        this.questionService = questionService;
     }
 
     @Override
@@ -56,7 +63,11 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public TrainingDto convertToObjectDTO(Training training) {
-        return new ModelMapper().map(training, TrainingDto.class);
+        TrainingDto trainingDto = new ModelMapper().map(training, TrainingDto.class);
+        trainingDto.setQuestions(training.getQuestions().stream()
+                .map(questionService::convertToObjectDTO)
+                .collect(Collectors.toSet()));
+        return trainingDto;
     }
 
     @Override
@@ -78,12 +89,12 @@ public class TrainingServiceImpl implements TrainingService {
     public TrainingDto sendUserTrainingSolutions(Long userId, TrainingDto solvedTraining) throws EntityNotFoundException {
         Integer score = getCorrectAnswers(solvedTraining).size();
         TrainingDto unchangedTraining = convertToObjectDTO(getTrainingById(solvedTraining.getId()));
-        UserDto foundedUser = userService.findById(userId);
+        UserDto foundedUser = userService.findUserById(userId);
         Integer userScore = foundedUser.getScore();
         if (userScore == null) userScore = 0;
         foundedUser.setScore(userScore + score);
         foundedUser.getTraining().add(unchangedTraining);
-        userService.update(foundedUser);
+        userService.updateUser(foundedUser);
         return solvedTraining;
     }
 

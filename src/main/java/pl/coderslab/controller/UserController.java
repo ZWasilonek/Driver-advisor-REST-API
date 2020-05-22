@@ -4,19 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.UserDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
-import pl.coderslab.service.impl.UserServiceImpl;
+import pl.coderslab.service.UserService;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -27,22 +26,17 @@ public class UserController {
 
     @GetMapping("/find/{id}")
     public UserDto getUserById(@PathVariable(value = "id") Long userId) throws EntityNotFoundException {
-        return userService.findById(userId);
+        return userService.findUserById(userId);
     }
 
     @PutMapping("/update")
     public UserDto updateUser(@Valid @RequestBody UserDto userDetails) throws EntityNotFoundException {
-        return userService.update(userDetails);
+        return userService.updateUser(userDetails);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUserById(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
-        userService.removeById(id);
-    }
-
-    @GetMapping("/findAll")
-    public List<UserDto> getAllUsers() throws EntityNotFoundException {
-        return userService.findAll();
+    public boolean deleteUserById(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
+        return userService.removeUserById(id);
     }
 
 }
