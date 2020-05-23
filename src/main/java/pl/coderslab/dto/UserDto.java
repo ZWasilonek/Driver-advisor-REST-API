@@ -40,7 +40,7 @@ public class UserDto {
     private Set<TrainingDto> training;
 
     @JsonIgnore
-    private Set<Role> roles;
+    private Set<RoleDto> roles;
 
     public UserDto() {
         roles = new HashSet<>();

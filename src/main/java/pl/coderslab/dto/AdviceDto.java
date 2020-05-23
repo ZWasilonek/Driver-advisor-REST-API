@@ -43,11 +43,11 @@ public class AdviceDto {
     private URL adviceFileURL;
 
     @NotNull
-    private User admin;
+    private UserDto admin;
 
-    private Set<Tag> tags;
+    private Set<TagDto> tags;
 
-    private Training training;
+    private TrainingDto training;
 
     public AdviceDto() {
         this.tags = new HashSet<>();

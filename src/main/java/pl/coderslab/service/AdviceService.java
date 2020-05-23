@@ -1,7 +1,10 @@
 package pl.coderslab.service;
 
 import pl.coderslab.dto.AdviceDto;
+import pl.coderslab.dto.TagDto;
 import pl.coderslab.model.Advice;
+
+import java.util.Set;
 
 public interface AdviceService {
 
@@ -15,4 +18,5 @@ public interface AdviceService {
     AdviceDto convertToObjectDTO(Advice entity);
     Advice convertToEntity(AdviceDto dto);
 
+    Set<AdviceDto> findAllAdviceByTagId(Long tagId);
 }

@@ -30,12 +30,4 @@ public class MultiTypeFile extends GenericEntityID {
     @Lob
     private byte[] data;
 
-    public MultiTypeFile(String fileName, String fileType, Long size) {
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.size = size;
-    }
-
-    public MultiTypeFile() {}
-
 }

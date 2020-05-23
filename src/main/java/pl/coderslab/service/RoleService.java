@@ -2,10 +2,11 @@ package pl.coderslab.service;
 
 import pl.coderslab.dto.RoleDto;
 import pl.coderslab.model.Role;
-import pl.coderslab.service.generic.GenericService;
 
-public interface RoleService extends GenericService<RoleDto, Role> {
+public interface RoleService {
 
     RoleDto getByName(String roleName);
+    Role convertToEntity(RoleDto roleDto);
+    RoleDto convertToObjectDTO(Role role);
 
 }

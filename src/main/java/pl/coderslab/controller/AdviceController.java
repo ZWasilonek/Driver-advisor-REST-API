@@ -4,9 +4,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.AdviceDto;
+import pl.coderslab.dto.TagDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.service.AdviceService;
 import javax.validation.Valid;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/advice")
@@ -53,6 +55,11 @@ public class AdviceController {
     @PostMapping("/share/{id}")
     public AdviceDto shareAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
         return adviceService.addSharingToAdvice(adviceId);
+    }
+
+    @GetMapping("/findByTag/{id}")
+    public Set<AdviceDto> findAllAdviceByTag(@PathVariable("id") Long tagId) {
+        return adviceService.findAllAdviceByTagId(tagId);
     }
 
     //    @ModelAttribute("userSession")

@@ -6,8 +6,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import pl.coderslab.dto.RoleDto;
 import pl.coderslab.dto.UserDto;
-import pl.coderslab.model.Role;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +28,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
 
         if (userDto == null) {throw new UsernameNotFoundException(username); }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : userDto.getRoles()) {
+        for (RoleDto role : userDto.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return new org.springframework.security.core.userdetails.User(

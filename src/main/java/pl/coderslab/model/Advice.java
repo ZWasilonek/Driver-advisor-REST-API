@@ -38,6 +38,8 @@ public class Advice extends GenericEntityID {
     private User admin;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "advice_tags", joinColumns = @JoinColumn(name = "advice_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
     @Column(name = "file_id")

@@ -4,22 +4,31 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.AdviceDto;
+import pl.coderslab.dto.TagDto;
+import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.model.Advice;
+import pl.coderslab.model.Training;
 import pl.coderslab.repository.AdviceRepository;
 import pl.coderslab.service.AdviceService;
 import pl.coderslab.service.MultiTypeFileService;
+import pl.coderslab.service.TrainingService;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AdviceServiceImpl implements AdviceService {
 
     private final AdviceRepository adviceRepository;
     private final MultiTypeFileService fileService;
+    private final TrainingService trainingService;
 
     @Autowired
-    public AdviceServiceImpl(AdviceRepository adviceRepository, MultiTypeFileService fileService) {
+    public AdviceServiceImpl(AdviceRepository adviceRepository, MultiTypeFileService fileService, TrainingService trainingService) {
         this.adviceRepository = adviceRepository;
         this.fileService = fileService;
+        this.trainingService = trainingService;
     }
 
     @Override
@@ -83,12 +92,23 @@ public class AdviceServiceImpl implements AdviceService {
         if (entity.getFileId() != null) {
             adviceDto.setAdviceFileURL(fileService.findByFileId(entity.getFileId()).getUploadDir());
         }
+        Training adviceTraining = entity.getTraining();
+        if (adviceTraining != null) {
+            TrainingDto trainingWithAnswersFileURL = trainingService.convertToObjectDTO(adviceTraining);
+            adviceDto.setTraining(trainingWithAnswersFileURL);
+        }
         return adviceDto;
     }
 
     @Override
     public Advice convertToEntity(AdviceDto dto) {
         return new ModelMapper().map(dto, Advice.class);
+    }
+
+    @Override
+    public Set<AdviceDto> findAllAdviceByTagId(Long tagId) throws EntityNotFoundException {
+        return adviceRepository.getAllAdviceByTagId(tagId).stream()
+                .map(advice -> convertToObjectDTO(advice)).collect(Collectors.toSet());
     }
 
     private void setExistingFileIdToAdvice(Long fileId, Advice advice) throws EntityNotFoundException {
