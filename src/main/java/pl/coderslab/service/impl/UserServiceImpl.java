@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
         userDto.setEnabled(1);
         RoleDto userRole = roleService.getByName("ROLE_USER");
         userDto.setRoles(new HashSet<RoleDto>(Arrays.asList(userRole)));
-        return convertToObjectDTO(userRepository.save(convertToEntity(userDto)));
+        User created = userRepository.save(convertToEntity(userDto));
+        return convertToObjectDTO(created);
     }
 
     @Override

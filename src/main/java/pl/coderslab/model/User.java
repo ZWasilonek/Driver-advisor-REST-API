@@ -27,6 +27,7 @@ public class User extends GenericEntityID {
     @Email
     @NotNull
     @NotBlank
+    @Column(unique = true)
     private String email;
 
     private int enabled;
@@ -38,7 +39,7 @@ public class User extends GenericEntityID {
             inverseJoinColumns = @JoinColumn(name = "training_id"))
     private Set<Training> training;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
