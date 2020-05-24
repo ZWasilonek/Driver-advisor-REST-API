@@ -62,6 +62,11 @@ public class AdviceController {
         return adviceService.findAllAdviceByTagId(tagId);
     }
 
+    @GetMapping("/adviceOfTheWeek")
+    public AdviceDto getAdviceOfTheWeek() {
+        return adviceService.findAdviceOfTheWeek();
+    }
+
     //    @ModelAttribute("userSession")
 //    public UserDto getUserFromSession() {
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

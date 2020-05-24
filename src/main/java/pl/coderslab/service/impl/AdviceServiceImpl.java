@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.AdviceDto;
-import pl.coderslab.dto.TagDto;
 import pl.coderslab.dto.TrainingDto;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.model.Advice;
@@ -105,10 +104,16 @@ public class AdviceServiceImpl implements AdviceService {
         return new ModelMapper().map(dto, Advice.class);
     }
 
+    //Ustal jak mają być segregowane
     @Override
     public Set<AdviceDto> findAllAdviceByTagId(Long tagId) throws EntityNotFoundException {
         return adviceRepository.getAllAdviceByTagId(tagId).stream()
                 .map(advice -> convertToObjectDTO(advice)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public AdviceDto findAdviceOfTheWeek() {
+        return convertToObjectDTO(adviceRepository.findFirstByOrderByRecommendationsDesc());
     }
 
     private void setExistingFileIdToAdvice(Long fileId, Advice advice) throws EntityNotFoundException {

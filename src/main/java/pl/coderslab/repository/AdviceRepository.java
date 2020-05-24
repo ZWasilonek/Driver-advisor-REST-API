@@ -14,4 +14,6 @@ public interface AdviceRepository extends JpaRepository<Advice, Long> {
     @Query(value = "SELECT a.id, created, file_id, guide, recommendations, shares, title, updated, admin_id, training_id FROM advice AS a JOIN advice_tags at ON a.id = at.advice_id WHERE tag_id=:tagId", nativeQuery = true)
     Set<Advice> getAllAdviceByTagId(@Param("tagId") Long tagId);
 
+    Advice findFirstByOrderByRecommendationsDesc();
+
 }

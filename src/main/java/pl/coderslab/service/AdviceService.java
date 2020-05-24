@@ -19,4 +19,6 @@ public interface AdviceService {
     Advice convertToEntity(AdviceDto dto);
 
     Set<AdviceDto> findAllAdviceByTagId(Long tagId);
+    AdviceDto findAdviceOfTheWeek();
+
 }
