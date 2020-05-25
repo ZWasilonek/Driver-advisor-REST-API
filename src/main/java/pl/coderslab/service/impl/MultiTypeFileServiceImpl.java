@@ -51,9 +51,8 @@ public class MultiTypeFileServiceImpl implements MultiTypeFileService {
                 newFile.setFileType(file.getContentType());
                 newFile.setSize(file.getSize());
                 newFile.setData(file.getBytes());
-//                multiTypeFileDto.setUploadDir();
                 savedDto = convertToObjectDTO(fileRepository.save(newFile));
-//                saveFileIntoDir(file);
+                saveFileIntoDir(file);
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -76,7 +75,7 @@ public class MultiTypeFileServiceImpl implements MultiTypeFileService {
                 founded.setFileType(file.getContentType());
                 founded.setData(file.getBytes());
                 updatedDto = convertToObjectDTO(fileRepository.save(founded));
-//                saveFileIntoDir(file);
+                saveFileIntoDir(file);
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
