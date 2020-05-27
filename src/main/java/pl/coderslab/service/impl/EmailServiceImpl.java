@@ -9,29 +9,28 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import pl.coderslab.dto.UserDto;
-import pl.coderslab.service.impl.generic.GenericServiceImpl;
-import pl.coderslab.model.User;
-import pl.coderslab.repository.UserRepository;
 import pl.coderslab.service.EmailService;
+import pl.coderslab.service.UserService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
-public class EmailServiceImpl extends GenericServiceImpl<UserDto, User, UserRepository> implements EmailService {
+public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
+    private final UserService userService;
 
     @Autowired
-    public EmailServiceImpl(UserRepository repository, JavaMailSender mailSender) {
-        super(repository);
+    public EmailServiceImpl(JavaMailSender mailSender, UserService userService) {
         this.mailSender = mailSender;
+        this.userService = userService;
     }
 
     @Override
     public void sendEmailToAdmin() {
         SimpleMailMessage mail = new SimpleMailMessage();
-        UserDto admin = convertToObjectDTO(repository.findByUsername("admin"), UserDto.class);
+        UserDto admin = userService.findByUserName("admin");
         mail.setTo(admin.getEmail());
         mail.setSubject("Testing Mail API");
         mail.setText("MAIL for ADMIN");
