@@ -28,15 +28,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/",
-                        "/user/**",
+                        "/user/create",
                         "/v2/api-docs",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
-                        "/webjars/**").permitAll()
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .antMatchers("/training/sentRecommendation").hasAnyRole("ADMIN", "USER")
-//                .anyRequest()
-//                .authenticated()
+                        "/webjars/**")
+                .permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/**").hasAnyRole("ADMIN", "USER")
+                .anyRequest()
+                .authenticated()
                 .and().formLogin().permitAll()
                 .and().logout().logoutSuccessUrl("/")
         .and()
