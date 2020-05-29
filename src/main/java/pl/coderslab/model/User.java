@@ -44,6 +44,9 @@ public class User extends GenericEntityID {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<EmailMessage> emails;
+
     public User() {
         roles = new HashSet<>();
     }
