@@ -12,22 +12,22 @@ Technologies:
 Running the app
 Insert database connection details and configuration for email in application_db.properties file: src/main/resources
 
+```sh
 Provide your login to connect to the local database:
-
 spring.datasource.username=
+```
 
+```sh
 Provide your password to connect to the local database:
-
 spring.datasource.password=
+```
 
+```sh
 Provide your email address:
-
 spring.mail.username=
+```
 
+```sh
 Provide your email password:
-
 spring.mail.password=
-
-
-
-
+```
