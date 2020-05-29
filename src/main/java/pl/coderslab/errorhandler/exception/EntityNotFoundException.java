@@ -1,6 +1,6 @@
 package pl.coderslab.errorhandler.exception;
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

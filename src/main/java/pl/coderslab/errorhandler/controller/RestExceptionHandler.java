@@ -25,7 +25,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pl.coderslab.errorhandler.exception.EntityNotFoundException;
 import pl.coderslab.errorhandler.error.ApiError;
-import springfox.documentation.service.ResponseMessage;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -174,11 +173,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handle NoHandlerFoundException.
      *
-     * @param ex
-     * @param headers
-     * @param status
-     * @param request
-     * @return
+     * @param ex NoHandlerFoundException
+     * @param headers HttpHeaders
+     * @param status HttpStatus
+     * @param request WebRequest
+     * @return the ApiError object
      */
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
