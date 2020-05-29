@@ -1,11 +1,9 @@
 package pl.coderslab.service;
 
-import pl.coderslab.dto.UserDto;
+import pl.coderslab.model.EmailMessage;
 
 public interface EmailService {
 
-    void sendEmailToUser(UserDto userDto);
-    void sendEmailWithAttachment(UserDto userDto);
-    void sendEmailToAdmin();
+    boolean sendEmail(final EmailMessage email, String recipientEmail);
 
 }

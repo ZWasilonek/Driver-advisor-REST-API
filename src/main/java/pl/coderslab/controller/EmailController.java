@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.dto.UserDto;
+import pl.coderslab.model.EmailMessage;
 import pl.coderslab.service.EmailService;
 import pl.coderslab.service.UserService;
+
+import javax.validation.Valid;
 
 @RestController
 public class EmailController {
@@ -37,27 +37,10 @@ public class EmailController {
     }
 
     @PostMapping("/sendEmail")
-    public String sendEmail() {
-        UserDto userDto = getUserFromSession();
-        userDto.setEmail("smtp.mailtrap.io");
-        try {
-            emailService.sendEmailToUser(userDto);
-        } catch (MailException mailException) {
-            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return "Congratulations! Your mail has been send to the user." + userDto.getEmail();
-    }
-
-    @RequestMapping("send-mail-attachment")
-    public String sendWithAttachment() {
-        UserDto userDto = getUserFromSession();
-        userDto.setEmail("smtp.mailtrap.io");
-        try {
-            emailService.sendEmailWithAttachment(userDto);
-        } catch (MailException mailException) {
-            new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return "Congratulations! Your mail has been send to the user.";
+    public boolean sendEmail(@Valid @RequestBody EmailMessage emailMessage,
+                            @RequestParam("recipientEmail") String recipientEmail) {
+//        UserDto sender = getUserFromSession();
+        return emailService.sendEmail(emailMessage, recipientEmail);
     }
 
 }

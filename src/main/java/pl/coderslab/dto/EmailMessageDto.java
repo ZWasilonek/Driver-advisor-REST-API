@@ -1,10 +1,10 @@
 package pl.coderslab.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.coderslab.model.User;
 
 @Getter
 @Setter
@@ -12,9 +12,10 @@ import pl.coderslab.model.User;
 @NoArgsConstructor
 public class EmailMessageDto {
 
-    private String host;
-    private User sender;
-    private User receiver;
+    private UserDto sender;
+
+    private UserDto recipient;
+
     private String subject;
     private String message;
 
