@@ -1,7 +1,8 @@
 package pl.coderslab.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.Column;
@@ -12,7 +13,8 @@ import javax.validation.constraints.NotNull;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "files")
-@Data
+@Getter
+@Setter
 public class MultiTypeFile extends GenericEntityID {
 
     @NotNull

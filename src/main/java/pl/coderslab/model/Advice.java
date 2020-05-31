@@ -62,4 +62,35 @@ public class Advice extends GenericEntityID {
         this.updated = LocalDate.now();
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setGuide(String guide) {
+        this.guide = guide;
+    }
+
+    public void setRecommendations(Integer recommendations) {
+        this.recommendations = recommendations;
+    }
+
+    public void setShares(Integer shares) {
+        this.shares = shares;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
+    }
+
+    public void setTraining(Training training) {
+        this.training = training;
+    }
 }

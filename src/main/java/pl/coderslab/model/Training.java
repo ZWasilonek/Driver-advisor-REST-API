@@ -1,7 +1,7 @@
 package pl.coderslab.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.coderslab.model.generic.GenericEntityID;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "training")
-@Data
+@Getter
 public class Training extends GenericEntityID {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -43,6 +43,14 @@ public class Training extends GenericEntityID {
     @PreUpdate
     public void setUpdated() {
         this.updated = LocalDate.now();
+    }
+
+    public void setMaxScore(Integer maxScore) {
+        this.maxScore = maxScore;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
     }
 
 }

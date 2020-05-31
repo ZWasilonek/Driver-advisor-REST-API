@@ -1,7 +1,8 @@
 package pl.coderslab.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
@@ -13,7 +14,8 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "users")
-@Data
+@Getter
+@Setter
 public class User extends GenericEntityID {
 
     @Column(nullable = false, unique = true)

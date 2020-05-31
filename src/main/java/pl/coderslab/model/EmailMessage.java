@@ -1,14 +1,16 @@
 package pl.coderslab.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import pl.coderslab.model.generic.GenericEntityID;
 
 import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "emails")
-@Data
+@Getter
+@Setter
 public class EmailMessage extends GenericEntityID {
 
     @ManyToOne
