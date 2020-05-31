@@ -28,7 +28,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @Service
 public class MultiTypeFileServiceImpl implements MultiTypeFileService {
 
-    private static final String UPLOADED_FOLDER = "src/main/webapp/resources/img/";
+    private static final String UPLOADED_FOLDER = "src/main/resources/META-INF/static/img";
     private static final Path fileStorageLocation = Paths.get(UPLOADED_FOLDER).toAbsolutePath().normalize();
 
     private final MultiTypeFileRepository fileRepository;
@@ -74,8 +74,8 @@ public class MultiTypeFileServiceImpl implements MultiTypeFileService {
                 founded.setFileName(file.getOriginalFilename());
                 founded.setFileType(file.getContentType());
                 founded.setData(file.getBytes());
-                updatedDto = convertToObjectDTO(fileRepository.save(founded));
                 saveFileIntoDir(file);
+                updatedDto = convertToObjectDTO(fileRepository.save(founded));
             }
         } catch (IOException e) {
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -143,11 +143,11 @@ public class MultiTypeFileServiceImpl implements MultiTypeFileService {
     }
 
     private static void saveFileIntoDir(MultipartFile file) {
-        Path path = Paths.get(fileStorageLocation + file.getOriginalFilename());
+        Path path = Paths.get(fileStorageLocation + "/" + file.getOriginalFilename());
         try {
             file.transferTo(path);
         } catch (IOException e) {
-            new ResponseEntity<>(HttpStatus.CREATED);
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
