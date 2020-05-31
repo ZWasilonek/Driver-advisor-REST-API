@@ -31,10 +31,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
-                        "/webjars/**")
-                .permitAll()
-                .antMatchers("/admin/**", "/role/**").hasRole("ADMIN")
-                .antMatchers("/**").hasAnyRole("ADMIN", "USER")
+                        "/webjars/**").permitAll()
+                .antMatchers("/admin/**",
+                        "/role/**",
+                        "/**/remove/**",
+                        "/**/create",
+                        "file/uploadFile").hasRole("ADMIN")
+                .antMatchers("/**","/user/update").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/**/update").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and().formLogin().permitAll()

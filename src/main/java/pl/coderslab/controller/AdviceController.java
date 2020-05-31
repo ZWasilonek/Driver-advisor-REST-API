@@ -37,7 +37,7 @@ public class AdviceController {
         return adviceService.updateAdvice(adviceDto, fileId);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/remove/{id}")
     public boolean removeAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
         return adviceService.removeAdviceById(adviceId);
     }

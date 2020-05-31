@@ -33,7 +33,7 @@ public class TagController {
         return tagService.updateTag(tagDto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/remove/{id}")
     public boolean removeTagById(@PathVariable("id") Long tagId) throws EntityNotFoundException {
         return tagService.removeTagById(tagId);
     }

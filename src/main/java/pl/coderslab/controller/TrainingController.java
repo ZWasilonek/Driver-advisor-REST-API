@@ -41,7 +41,7 @@ public class TrainingController {
         return trainingService.updateTraining(trainingDto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/remove/{id}")
     public boolean removeTrainingById(@PathVariable("id") Long trainingId) throws EntityNotFoundException {
         return trainingService.removeTrainingById(trainingId);
     }

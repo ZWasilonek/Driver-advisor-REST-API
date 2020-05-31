@@ -41,8 +41,8 @@ public class MultiTypeFileController {
         return multiTypeFileService.updateFile(file, fileId);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public boolean deleteFileById(@PathVariable("id") Long imageId) throws EntityNotFoundException {
+    @DeleteMapping("/remove/{id}")
+    public boolean removeFileById(@PathVariable("id") Long imageId) throws EntityNotFoundException {
         return multiTypeFileService.removeFileById(imageId);
     }
 

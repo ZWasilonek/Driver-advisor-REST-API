@@ -34,8 +34,8 @@ public class UserController {
         return userService.updateUser(userDetails);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public boolean deleteUserById(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
+    @DeleteMapping("/remove/{id}")
+    public boolean removeUserById(@PathVariable(value = "id") Long id) throws EntityNotFoundException {
         return userService.removeUserById(id);
     }
 

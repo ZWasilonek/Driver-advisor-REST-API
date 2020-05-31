@@ -41,7 +41,7 @@ public class QuestionController {
         return questionService.updateQuestion(questionDto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/remove/{id}")
     public void removeQuestionById(@PathVariable("id") Long questionId) throws EntityNotFoundException {
         questionService.removeQuestionById(questionId);
     }

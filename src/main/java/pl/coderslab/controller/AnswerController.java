@@ -36,7 +36,7 @@ public class AnswerController {
         return answerService.updateAnswer(answerDto, fileId);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/remove/{id}")
     public boolean removeAnswerById(@PathVariable("id") Long answerId) throws EntityNotFoundException {
         return answerService.removeAnswerById(answerId);
     }
