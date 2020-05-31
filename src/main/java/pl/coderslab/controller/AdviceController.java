@@ -31,6 +31,8 @@ public class AdviceController {
         return adviceService.findAdviceById(adviceId);
     }
 
+    //add file - create time null
+    //update - create time -1 day ?
     @PutMapping("/update")
     public AdviceDto updateAdvice(@Valid @RequestBody AdviceDto adviceDto,
                                   @RequestParam(required = false) Long fileId) throws EntityNotFoundException {
@@ -42,13 +44,13 @@ public class AdviceController {
         return adviceService.removeAdviceById(adviceId);
     }
 
-    @ApiOperation(value = "Adds a recommendation to the advice's number of recommendations by its id", response = AdviceDto.class)
+    @ApiOperation(value = "Adds a recommendation to the advice number of recommendations by its id", response = AdviceDto.class)
     @PostMapping("/sendRecommendation/{id}")
     public AdviceDto sendRecommendation(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
         return adviceService.addRecommendationToAdvice(adviceId);
     }
 
-    @ApiOperation(value = "Adds a share to the advice's number of shares by its id", response = AdviceDto.class)
+    @ApiOperation(value = "Adds a share to the advice number of shares by its id", response = AdviceDto.class)
     @PostMapping("/share/{id}")
     public AdviceDto shareAdviceById(@PathVariable("id") Long adviceId) throws EntityNotFoundException {
         return adviceService.addSharingToAdvice(adviceId);
@@ -63,5 +65,15 @@ public class AdviceController {
     public AdviceDto getAdviceOfTheWeek() {
         return adviceService.findAdviceOfTheWeek();
     }
+
+    //    @ModelAttribute("userSession")
+//    public UserDto getUserFromSession() {
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            String username = ((UserDetails) principal).getUsername();
+//            return userService.findByUserName(username);
+//        }
+//        return null;
+//    }
 
 }
