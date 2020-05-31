@@ -18,28 +18,15 @@ import javax.validation.Valid;
 public class EmailController {
 
     private final EmailService emailService;
-    private final UserService userService;
 
     @Autowired
-    public EmailController(EmailService emailService, UserService userService) {
+    public EmailController(EmailService emailService) {
         this.emailService = emailService;
-        this.userService = userService;
-    }
-
-    @ModelAttribute("userSession")
-    public UserDto getUserFromSession() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            String username = ((UserDetails) principal).getUsername();
-            return userService.findByUserName(username);
-        }
-        return null;
     }
 
     @PostMapping("/sendEmail")
     public boolean sendEmail(@Valid @RequestBody EmailMessage emailMessage,
                             @RequestParam("recipientEmail") String recipientEmail) {
-//        UserDto sender = getUserFromSession();
         return emailService.sendEmail(emailMessage, recipientEmail);
     }
 
