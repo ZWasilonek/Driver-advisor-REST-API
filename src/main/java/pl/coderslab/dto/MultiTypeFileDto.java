@@ -13,7 +13,6 @@ import java.net.URL;
 @Setter
 public class MultiTypeFileDto {
 
-    @Id
     private Long id;
 
     @NotNull

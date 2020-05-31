@@ -15,7 +15,6 @@ import java.util.Set;
 @Setter
 public class UserDto {
 
-    @Id
     private Long id;
 
     @NotNull

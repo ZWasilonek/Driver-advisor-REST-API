@@ -15,7 +15,6 @@ import java.util.Set;
 @Setter
 public class TrainingDto {
 
-    @Id
     private Long id;
 
     private Integer maxScore;

@@ -14,7 +14,6 @@ import java.util.Set;
 @Setter
 public class QuestionDto {
 
-    @Id
     private Long id;
 
     @NotNull

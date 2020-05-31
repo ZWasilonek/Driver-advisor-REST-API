@@ -1,6 +1,5 @@
 package pl.coderslab.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Id;
@@ -13,8 +12,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class RoleDto {
 
-    @Id
-    @JsonIgnore
     private Long id;
 
     @NotNull

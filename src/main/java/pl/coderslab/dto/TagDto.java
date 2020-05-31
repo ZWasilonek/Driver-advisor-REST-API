@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class TagDto {
 
-    @Id
     private Long id;
 
     @NotNull

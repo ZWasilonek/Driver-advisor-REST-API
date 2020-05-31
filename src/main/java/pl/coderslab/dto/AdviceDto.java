@@ -16,7 +16,6 @@ import java.util.Set;
 @Getter
 public class AdviceDto {
 
-    @Id
     private Long id;
 
     @NotNull

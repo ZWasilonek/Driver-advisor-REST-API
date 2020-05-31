@@ -12,7 +12,6 @@ import java.net.URL;
 @Setter
 public class AnswerDto {
 
-    @Id
     private Long id;
 
     @NotNull
