@@ -1,7 +1,7 @@
 # Driver advisor REST API
 Application for drivers who have the opportunity to improve their driving technique in theory. The user has access to the content of advice related to the selected issue, can recommend it, share it and if the issue contains training to consolidate the advice, we can go to the quiz.
 
-##Technologies: 
+## Technologies: 
 
 * Spring Boot
 * Spring Security 
@@ -73,3 +73,9 @@ password: admin
 He has access to all endpoints
 
 * you can create your own user with free access to the endpoint "/user/create" whose default role will be "USER"
+
+## Sample interface for the application
+
+Prepared by the CodersLab bootcamp
+
+![alt text](https://trello-attachments.s3.amazonaws.com/5eb5216f15b31b30dd85db60/5eb5216f15b31b30dd85db88/958x530/b3f18604d02f42e14ceadedbf91b8ad6/zalacznik.png)
