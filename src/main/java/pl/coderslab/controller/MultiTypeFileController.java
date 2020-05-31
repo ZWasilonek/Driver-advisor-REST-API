@@ -53,7 +53,7 @@ public class MultiTypeFileController {
         return multiTypeFileService.loadIntoBrowser(fileId);
     }
 
-    @ApiOperation(value = "Download a file from database by file id")
+    @ApiOperation(value = "Download a file from database by file id", response = URL.class)
     @GetMapping("/downloadFile/{id}")
     public ResponseEntity<?> downloadFile(@PathVariable("id") Long fileId) throws EntityNotFoundException {
         return multiTypeFileService.downloadFileById(fileId);
