@@ -3,9 +3,6 @@ package pl.coderslab.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import pl.coderslab.model.Tag;
-import pl.coderslab.model.Training;
-import pl.coderslab.model.User;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;

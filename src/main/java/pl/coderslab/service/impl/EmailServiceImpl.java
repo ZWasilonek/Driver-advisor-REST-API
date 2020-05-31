@@ -1,35 +1,23 @@
 package pl.coderslab.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import pl.coderslab.dto.UserDto;
-import pl.coderslab.errorhandler.controller.RestExceptionHandler;
 import pl.coderslab.model.EmailMessage;
 import pl.coderslab.service.EmailService;
-import pl.coderslab.service.UserService;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
-    private final UserService userService;
 
     @Autowired
-    public EmailServiceImpl(JavaMailSender mailSender, UserService userService) {
+    public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-        this.userService = userService;
     }
 
     @Override

@@ -45,7 +45,6 @@ public class AdviceServiceImpl implements AdviceService {
         return convertToObjectDTO(advice);
     }
 
-    //create => null
     @Override
     public AdviceDto updateAdvice(AdviceDto adviceDto, Long fileId) throws EntityNotFoundException {
         checkIfAdviceExistsOrThrowException(adviceDto.getId());
@@ -104,7 +103,6 @@ public class AdviceServiceImpl implements AdviceService {
         return new ModelMapper().map(dto, Advice.class);
     }
 
-    //Ustal jak mają być segregowane
     @Override
     public Set<AdviceDto> findAllAdviceByTagId(Long tagId) throws EntityNotFoundException {
         return adviceRepository.getAllAdviceByTagId(tagId).stream()

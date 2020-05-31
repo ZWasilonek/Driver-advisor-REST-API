@@ -1,7 +1,6 @@
 package pl.coderslab.service;
 
 import pl.coderslab.dto.AdviceDto;
-import pl.coderslab.dto.TagDto;
 import pl.coderslab.model.Advice;
 
 import java.util.Set;

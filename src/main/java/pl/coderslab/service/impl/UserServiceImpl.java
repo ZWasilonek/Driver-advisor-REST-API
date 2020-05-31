@@ -19,7 +19,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
-//    private final TrainingService trainingService;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -28,7 +27,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
-//        this.trainingService = trainingService;
     }
 
     @Override
@@ -69,15 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto convertToObjectDTO(User user) {
-        UserDto userDto = new ModelMapper().map(user, UserDto.class);
-//        Set<Training> userTraining = user.getTraining();
-//        if (userTraining != null) {
-//            Set<TrainingDto> trainingsWithAnswersFileURL = userTraining.stream()
-//                    .map(training -> trainingService.convertToObjectDTO(training))
-//                    .collect(Collectors.toSet());
-//            userDto.setTraining(trainingsWithAnswersFileURL);
-//        }
-        return userDto;
+        return new ModelMapper().map(user, UserDto.class);
     }
 
     @Override
