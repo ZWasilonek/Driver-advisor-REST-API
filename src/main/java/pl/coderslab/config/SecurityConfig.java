@@ -12,7 +12,6 @@ import pl.coderslab.service.SpringDataUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Bean
     public SpringDataUserDetailsService customUserDetailsService() {
         return new SpringDataUserDetailsService();
@@ -22,7 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

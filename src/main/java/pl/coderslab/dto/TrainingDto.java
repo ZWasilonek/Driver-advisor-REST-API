@@ -1,7 +1,6 @@
 package pl.coderslab.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class TrainingDto {
 
     @Id
