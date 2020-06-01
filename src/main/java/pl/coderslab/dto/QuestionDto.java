@@ -3,7 +3,6 @@ package pl.coderslab.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
