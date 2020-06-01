@@ -12,6 +12,7 @@ public interface UserService {
     UserDto updateUser(UserDto userDto);
     boolean removeUserById(Long userId);
 
+    UserDto findByEmail(String email);
     UserDto convertToObjectDTO(User user);
     User convertToEntity(UserDto userDto);
 

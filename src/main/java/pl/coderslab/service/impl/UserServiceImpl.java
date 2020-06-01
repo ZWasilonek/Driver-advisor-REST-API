@@ -66,6 +66,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findByEmail(String email) {
+        return convertToObjectDTO(userRepository.findByEmail(email));
+    }
+
+    @Override
     public UserDto convertToObjectDTO(User user) {
         return new ModelMapper().map(user, UserDto.class);
     }
