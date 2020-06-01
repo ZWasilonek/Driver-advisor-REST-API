@@ -3,8 +3,8 @@ package pl.coderslab.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import pl.coderslab.model.EmailMessage;
 
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -39,6 +39,8 @@ public class UserDto {
 
     @JsonIgnore
     private Set<RoleDto> roles;
+
+    private Set<EmailMessage> emails;
 
     public UserDto() {
         roles = new HashSet<>();
