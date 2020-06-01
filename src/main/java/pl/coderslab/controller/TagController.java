@@ -9,6 +9,7 @@ import pl.coderslab.service.TagService;
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/tag")
 public class TagController {
 
     private final TagService tagService;
