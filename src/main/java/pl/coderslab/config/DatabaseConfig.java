@@ -7,17 +7,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
-@Configuration
-public class DatabaseConfig {
+/**
+ * This class is for HEROKU
+**/
 
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
+//@Configuration
+//public class DatabaseConfig {
 
-    @Bean
-    public DataSource dataSource() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
-        return new HikariDataSource(config);
-    }
+//    @Value("${spring.datasource.url}")
+//    private String dbUrl;
+//
+//    @Bean
+//    public DataSource dataSource() {
+//        HikariConfig config = new HikariConfig();
+//        config.setJdbcUrl(dbUrl);
+//        return new HikariDataSource(config);
+//    }
 
-}
+//}
