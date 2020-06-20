@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import pl.coderslab.model.Tag;
 
 @Repository
-public interface TagRepository extends JpaRepository<Tag, Long> {
-}
+public interface TagRepository extends JpaRepository<Tag, Long> { }

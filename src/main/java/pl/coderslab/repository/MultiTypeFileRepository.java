@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import pl.coderslab.model.MultiTypeFile;
 
 @Repository
-public interface MultiTypeFileRepository extends JpaRepository<MultiTypeFile, Long> {
-}
+public interface MultiTypeFileRepository extends JpaRepository<MultiTypeFile, Long> { }

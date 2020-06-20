@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository;
 import pl.coderslab.model.Question;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Long> {
-}
+public interface QuestionRepository extends JpaRepository<Question, Long> { }
