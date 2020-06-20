@@ -3,6 +3,8 @@
 ### See the application on HEROKU
 https://driver-advisor-rest-api.herokuapp.com/
 
+![alt text](https://user-images.githubusercontent.com/59224048/85204389-701eb580-b314-11ea-8c5b-101424547f64.png)
+
 Application for drivers who have the opportunity to improve their driving technique in theory. The user has access to the content of advice related to the selected issue. The user can recommend them, and if the issue includes training, he can solve them for which he receives in return a certain number of points, enrolling in his account advice. Training and tips may include photos, gifs or a video.
 
 ## Technologies: 
