@@ -40,8 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/update").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
-                .and().formLogin().permitAll()
-                .and().logout().logoutSuccessUrl("/")
+                .and()
+                .formLogin().permitAll()
+                .defaultSuccessUrl("/welcome")
+                .and().logout()
+                    .invalidateHttpSession(true)
+                    .logoutSuccessUrl("/")
         .and()
         .csrf().disable();
     }
