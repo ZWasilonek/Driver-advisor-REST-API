@@ -6,7 +6,7 @@
     <groupId>pl.coderslab</groupId>
     <artifactId>portfoliolab-driver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>portfoliolab-driver</name>
     <description>PortfolioLab Example REST</description>
