@@ -1,5 +1,9 @@
 # Driver advisor REST API
-Application for drivers who have the opportunity to improve their driving technique in theory. The user has access to the content of advice related to the selected issue, can recommend it, share it and if the issue contains training to consolidate the advice, we can go to the quiz.
+
+### See the application on HEROKU
+https://driver-advisor-rest-api.herokuapp.com/
+
+Application for drivers who have the opportunity to improve their driving technique in theory. The user has access to the content of advice related to the selected issue. The user can recommend them, and if the issue includes training, he can solve them for which he receives in return a certain number of points, enrolling in his account advice. Training and tips may include photos, gifs or a video.
 
 ## Technologies: 
 
@@ -9,12 +13,7 @@ Application for drivers who have the opportunity to improve their driving techni
 * Hibernate
 * MySQL
 
-## Pre-requirements
-* jdk 1.8
-* maven
-* Java IDE
-
-## Running the app
+## Running the application locally
 To run the application, insert in the application.properties file located in src/main/resources:
  
 * database connection details 
@@ -41,17 +40,15 @@ Provide your email password:
 spring.mail.password=
 ```
 
-* run app
+* run application
 
-run DrivingAdvisorApplication class in your IDE
+    - using maven: <strong>mvn package spring-boot:run</strong>
+    - with java -jar command: <strong>java -jar target/portfoliolab-driver-0.0.1-SNAPSHOT.jar</strong>
+    - IDE: run DrivingAdvisorApplication.java class
 
-## Swagger documentation
+## Swagger documentation from HEROKU
 
-Change the port number, I use the default 8080
-http://localhost:8080/v2/api-docs
-
-To see the result of the application's operation, you can use swagger:
-http://localhost:8080/swagger-ui.html
+https://driver-advisor-rest-api.herokuapp.com/v2/api-docs
 
 ## Spring security
 
@@ -63,7 +60,7 @@ username: user
 password: user
 ```
 
-He has access to the endpoints: "user/create", "/user/update" and all others except the others "/create", "/update", all "/remove" and "/role"
+He has access to the endpoints: "user/create", "/user/update" and all others except the others "/\*\*/create", "/\*\*/update", all "/\*\*/remove" and "/role/\*\*"
 
 * or a user with the role "ADMIN"
 ```sh
