@@ -1,4 +1,6 @@
 # create database driver_advisor char set utf8mb4 collate utf8mb4_unicode_ci;
+SET @@auto_increment_increment=1;
+set @@auto_increment_offset = 1;
 
 INSERT INTO roles(role) VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 
