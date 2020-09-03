@@ -80,5 +80,5 @@ Prepared by the CodersLab bootcamp
 ![alt text](https://trello-attachments.s3.amazonaws.com/5eb5216f15b31b30dd85db60/5eb5216f15b31b30dd85db88/958x530/b3f18604d02f42e14ceadedbf91b8ad6/zalacznik.png)
 
 ## Contact 
-zofiawasilonek@.gmail.com<br>
+zofiawasilonek@gmail.com<br>
 <a href="https://www.linkedin.com/in/zofia-wasilonek/">Linkedin</a>
